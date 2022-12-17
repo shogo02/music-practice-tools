@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react';
-import BpmSlider from './BpmSlider';
 import * as Tone from 'tone';
 import contextJson from '../context/context.json'
-
+import { useAtom } from 'jotai';
+import { useKey } from 'react-use';
+import { playStateAtom } from '../atoms/atom';
 
 const singleNoteList = contextJson.singleNoteList;
 
 
-type mainProps = {
-    beatCount: number
-}
 const Main = () => {
-
-    const [bpm, setBpm] = React.useState(120); // TODO: 今のところ不要
-    const [isMetronomePaly, setIsMetronomePlay] = React.useState(false);
     const [note, setNote] = React.useState("X");
     const [beatCount, setBeatCount] = React.useState(0);
+    const [playState, setPlayState] = useAtom(playStateAtom);
+    
+    useKey(' ', () => {
+        Tone.Transport.toggle();
+        setPlayState(Tone.Transport.state.toString());
+    });
 
     useEffect(() => {
         const synth = new Tone.Synth({ envelope: { release: 0.4 } }).toDestination();
@@ -29,8 +30,10 @@ const Main = () => {
             { time: "0:3", note: "C5", velocity: 1 }
         ]).start(0);
         part.loop = true;
-        return () => {Tone.Transport.cancel()};
-    }, [isMetronomePaly])
+
+        return () => { Tone.Transport.cancel(); setBeatCount(0); };
+    }, [playState])
+
 
     const draw = () => {
         const position = Tone.Transport.position.toString().split(":").map(Number);
@@ -43,27 +46,13 @@ const Main = () => {
         }
     }
 
-    const metronomeToggle = () => {
-        if (isMetronomePaly) {
-            Tone.Transport.stop()
-            setIsMetronomePlay(false)
-            setBeatCount(0)
-        } else if (!isMetronomePaly) {
-            Tone.Transport.start()
-            setIsMetronomePlay(true)
-        }
-    }
-
     return (
-        <div>Main</div>
-        // <div className="App">
-        //     <h1 className="text-3xl font-bold underline">{note}&#9837;m7<sup>(&#9837;5)</sup></h1>
-        //     <h1>{beatCount + 1}</h1>
-        //     <button className="beat" type="button" onClick={metronomeToggle}>{isMetronomePaly ? "stop" : "start"}</button>
-
-        //     <BpmSlider setBpm={setBpm} />
-        //     &#9837;	&#9839;
-        // </div>
+        <div className='border border-black h-full'>
+            Main
+            <h1>{note}</h1>
+            <h1>{beatCount + 1}</h1>
+            {/* &#9837;	&#9839; */}
+        </div>
     )
 }
 
