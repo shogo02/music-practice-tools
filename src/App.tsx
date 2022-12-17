@@ -8,12 +8,12 @@ import { Provider } from 'jotai';
 function App() {
     return (
         <Provider>
-            <div className='h-screen'>
+            <div className='h-screen bg-[#e6e6e6]'>
                 <div className="flex flex-row justify-between h-3/4">
                     <div className="basis-1/2 border border-black">
                         <Pad />
                     </div>
-                    <div className="basis-full border border-black flex flex-col pt-20">
+                    <div className="basis-full border border-black flex flex-col pt-20 mx-14">
                         <div className='h-5/6 border border-black'>
                             <Main />
                         </div>
