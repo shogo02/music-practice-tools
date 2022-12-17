@@ -16,7 +16,9 @@ const Pad = () => {
     return (
         <div className="mt-20 mx-6">
             <div className="grid grid-cols-3 gap-5">
-                <div className="col-span-3"><PadButton text={playButtonText} /></div>
+                <div onClick={onClickPlay} className="col-span-3">
+                    <PadButton text={playButtonText} />
+                </div>
                 <div className="col-span-1"><PadButton text={"R"} /></div>
                 <div className="col-span-1"><PadButton text={"5"} /></div>
                 <div className="col-span-1"><PadButton text={"M"} /></div>
