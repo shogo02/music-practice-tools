@@ -4,9 +4,10 @@ import contextJson from '../context/context.json'
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
 import { playStateAtom } from '../atoms/atom';
+import { ChordCalculator } from '../util/ChordCalculator';
 
 const singleNoteList = contextJson.singleNoteList;
-
+const chordCalculator = new ChordCalculator();
 
 const Main = () => {
     const [note, setNote] = React.useState("X");
@@ -41,8 +42,8 @@ const Main = () => {
         setBeatCount(beat);
 
         if (beat === 0) {
-            const singleNote = Math.floor(Math.random() * singleNoteList.length);
-            setNote(singleNoteList[singleNote].note);
+            const root = chordCalculator.getRandomRoot(true, true);
+            setNote(root.note.toString());
         }
     }
 
