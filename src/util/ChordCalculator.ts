@@ -13,7 +13,6 @@ export type Chord = {
     _11th: 'none' | 'natural' | 'sharp';
     _13th: 'none' | 'natural' | 'flat';
 }
-
 export const normalRoot: Array<Note> = [
     { noteId: 1, note: "C", isAbleToSharp: true, isAbleToFlat: false},
     { noteId: 3, note: "D", isAbleToSharp: true, isAbleToFlat: true},
@@ -29,10 +28,7 @@ export const sharpFlatRootList = [2, 4, 6, 8, 10]
 
 export class ChordCalculator {
     beforeRootNoteId = 0;
-
-    constructor(){
-    }
-    
+        
     getRandomRoot(isSharp?: boolean, isFlat?: boolean) {
         const shuffle = () => {
             let tmp = normalRoot[this.getRandomNumber()];
