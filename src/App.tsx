@@ -8,7 +8,7 @@ import { Provider } from 'jotai';
 function App() {
     return (
         <Provider>
-            <div className='h-screen bg-[#e6e6e6]'>
+            <div className='h-screen bg-[#e6e6e6] select-none font-mono'>
                 <div className="flex flex-row justify-between h-3/4">
                     <div className="basis-1/2 border border-black">
                         <Pad />

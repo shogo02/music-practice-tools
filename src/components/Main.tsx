@@ -47,10 +47,10 @@ const Main = () => {
     }
 
     return (
-        <div className='border border-black h-full'>
-            Main
-            <h1>{note}</h1>
-            <h1>{beatCount + 1}</h1>
+        <div className='border border-black h-full bg-[#000730] text-cyan-200 p-7'>
+            <div className='text-4xl'>{beatCount + 1}</div>
+            <div className='text-5xl text-center'>{note}</div>
+            <div className='text-2xl text-center'>{note}</div>
             {/* &#9837;	&#9839; */}
         </div>
     )
