@@ -16,7 +16,7 @@ const BpmSlider = () => {
       <h1>{bpm} bpm</h1>
 
       <Slider
-        defaultValue={bpm}
+        defaultValue={120}
         valueLabelDisplay="off"
         min={30}
         max={360}
@@ -26,7 +26,7 @@ const BpmSlider = () => {
 
       <h1>{volume} db</h1>
       <Slider
-        defaultValue={volume}
+        defaultValue={-14}
         valueLabelDisplay="off"
         min={-60}
         max={0}
