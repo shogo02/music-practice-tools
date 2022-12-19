@@ -1,4 +1,5 @@
 import { useAtom } from "jotai";
+import { useState } from "react";
 import * as Tone from 'tone';
 import { isSingleNoteFlatAtom, isSingleNoteSharpAtom, noteSettingsAtom, playStateAtom } from '../atoms/atom'
 import PadButton from "./Parts.tsx/PadButton";
@@ -9,12 +10,11 @@ const Pad = () => {
     const [isSingleNoteFlat, setIsSingleNoteFlat] = useAtom(isSingleNoteFlatAtom);
     const [noteSettings, setnoteSettings] = useAtom(noteSettingsAtom);
 
-    const transportState = Tone.Transport.state.toString();
     const onClickPlay = () => {
         Tone.Transport.toggle();
-        setPlayState(Tone.Transport.state.toString());
+        const transportState = Tone.Transport.state.toString();
+        setPlayState(transportState);
     }
-    const playButtonText = transportState == "started" ? "■" : "▶";
 
     const onClickSingleNoteSharp = () => { setIsSingleNoteSharp(!isSingleNoteSharp) }
     const onClickSingleNoteFlat = () => { setIsSingleNoteFlat(!isSingleNoteFlat) }
@@ -32,8 +32,8 @@ const Pad = () => {
     return (
         <div className="mt-20 mx-6">
             <div className="grid grid-cols-3 gap-5">
-                <div onClick={onClickPlay} className="col-span-3">
-                    <PadButton text={playButtonText} />
+                <div className="col-span-3">
+                    <PadButton text={playState === "started" ? "■" : "▶"} onClick={onClickPlay} isTrue={playState === "started" ? true : false} />
                 </div>
                 <div className="col-span-1">
                     <PadButton text={'#'} onClick={onClickSingleNoteSharp} isTrue={isSingleNoteSharp} />
