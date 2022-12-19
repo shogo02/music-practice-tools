@@ -8,15 +8,19 @@ type PadButtonProps = {
     onClick?: any;
 }
 
-function PadButton(props: PadButtonProps) {
-  let className = 'h-10 leading-10 text-sm rounded-[50px] shadow-[10px_10px_20px_#c4c4c4,-10px_-10px_20px_#ffffff] text-center text-';
-  if(props.isTrue) className += " text-red-400";
-
+const PadButton = ((props: PadButtonProps) => {
+  let className = 'h-8 leading-8 text-m text-center rounded-[10px] cursor-pointer';
+  if(props.isTrue){
+    className += ' font-bold text-red-400 shadow-[inset_2px_2px_10px_#b5b5b5,inset_-2px_-2px_10px_#ffffff]';
+  }else {
+    className += ' shadow-[2px_2px_10px_#c4c4c4,-2px_-2px_10px_#ffffff]'
+  }
+  
   return (
-    <div onClick={props.onClick} className={className} >
+    <div onClick={props.onClick} className={className}  >
         { parse(props.text) }
     </div>
   )
-}
+})
 
 export default PadButton

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import * as Tone from 'tone';
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
-import { flatNotationAtom, isSingleNoteFlatAtom, isSingleNoteSharpAtom, playStateAtom, sharpNotationAtom } from '../atoms/atom';
+import { flatOrSharpNotaitionAtom, isSingleNoteFlatAtom, isSingleNoteSharpAtom, noteSettingsAtom, playStateAtom } from '../atoms/atom';
 import { Chord, ChordCalculator } from '../util/ChordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
@@ -16,8 +16,8 @@ const Main = () => {
     const [playState, setPlayState] = useAtom(playStateAtom);
     const [isSingleNoteSharp, setIsSingleNoteSharp] = useAtom(isSingleNoteSharpAtom);
     const [isSingleNoteFlat, setIsSingleNoteFlat] = useAtom(isSingleNoteFlatAtom);
-    const [sharpNotation, setSharpNotation] = useAtom(sharpNotationAtom);
-    const [flatNotation, setFlatNotation] = useAtom(flatNotationAtom);
+    const [flatOrSharpNotaition, setflatOrSharpNotaition] = useAtom(flatOrSharpNotaitionAtom);
+    const [noteSettings, setnoteSettings] = useAtom(noteSettingsAtom);
     
     useKey(' ', () => {
         Tone.Transport.toggle();
@@ -26,7 +26,6 @@ const Main = () => {
 
     useEffect(() => {
         const synth = new Tone.Synth({ envelope: { release: 0.4 } }).toDestination();
-        // synth.volume.value = -12 ;
         const part = new Tone.Part(((time, value) => {
             synth.triggerAttackRelease(value.note, "0.1", time, value.velocity);
             Tone.Draw.schedule(draw, time);
@@ -38,11 +37,11 @@ const Main = () => {
         ]).start(0);
         part.loop = true;
 
-        chordCalculator.sharpNotaion = sharpNotation;
-        chordCalculator.flatNotaion = flatNotation;
+        chordCalculator.flatOrSharpNotaition = flatOrSharpNotaition;
+        chordCalculator.noteSettings = noteSettings;
 
-        return () => { Tone.Transport.cancel(); setBeatCount(0); };
-    }, [playState])
+        return () => { Tone.Transport.cancel(); };
+    }, [playState, flatOrSharpNotaition, isSingleNoteSharp, isSingleNoteFlat])
 
 
     const draw = () => {

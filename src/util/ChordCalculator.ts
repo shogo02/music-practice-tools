@@ -47,8 +47,8 @@ export class ChordCalculator {
     readonly INTERVAL = this.MC.IntervalFromRoot;
 
     beforeRootNoteId = 0;
-    sharpNotaion: boolean | null = null;
-    flatNotaion: boolean | null = null;
+    flatOrSharpNotaition = '';
+    noteSettings = {}
 
     getRandomRoot(isRootSharp?: boolean, isRootFlat?: boolean) {
         const shuffle = () => {
@@ -108,10 +108,10 @@ export class ChordCalculator {
         let note = "";
 
         const isSharpOrFlat = sharpFlatList.indexOf(noteId) < 0 ? false : true;
-        if (isSharpOrFlat && this.sharpNotaion) {
+        if (isSharpOrFlat && this.flatOrSharpNotaition === 'sharp') {
             tmpNoteId = this.getNoteIdFromInterval(noteId, -1);
             note = normalRoot.find(e => e.noteId === tmpNoteId)?.note + "#";
-        }else if(isSharpOrFlat && this.flatNotaion){
+        }else if(isSharpOrFlat && this.flatOrSharpNotaition === 'flat'){
             tmpNoteId = this.getNoteIdFromInterval(noteId, 1);
             note = normalRoot.find(e => e.noteId === tmpNoteId)?.note + "b";
         } else {
