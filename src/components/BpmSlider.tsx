@@ -20,7 +20,7 @@ const BpmSlider = () => {
         defaultValue={InitialValues.BPM}
         valueLabelDisplay="off"
         min={Constants.BPM.min}
-        max={Constants.BPM.min}
+        max={Constants.BPM.max}
         style={{ width: 200 }}
         onChange={(event, value: any) => setBpm(value)}
       />
