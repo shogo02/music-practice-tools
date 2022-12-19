@@ -19,6 +19,18 @@ export type Chord = {
     _13th: 'none' | 'natural' | 'flat';
 }
 
+export type NoteSettings = {
+    isMajor3rd: boolean;
+    isMinor3rd: boolean;
+    isSus4: boolean;
+    is5th: boolean;
+    isAug5th: boolean;
+    isDim5th: boolean;
+    isMajor7th: boolean;
+    isMinor7th: boolean;
+    is6th: boolean;
+}
+
 export class NotesInChord {
     root: Note = {noteId: 0, note: "", };
     _3rd: Note | null = null;

@@ -3,7 +3,7 @@ import * as Tone from 'tone';
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
 import { flatOrSharpNotaitionAtom, isSingleNoteFlatAtom, isSingleNoteSharpAtom, noteSettingsAtom, playStateAtom } from '../atoms/atom';
-import { Chord, ChordCalculator } from '../util/ChordCalculator';
+import { Chord, ChordCalculator } from '../util/chordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
 

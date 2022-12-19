@@ -23,8 +23,8 @@ const Pad = () => {
         if(target === 'minor3rd') setnoteSettings({...noteSettings, isMinor3rd: !noteSettings.isMinor3rd})
         if(target === 'sus4') setnoteSettings({...noteSettings, isSus4: !noteSettings.isSus4})
         if(target === '5th') setnoteSettings({...noteSettings, is5th: !noteSettings.is5th})
-        if(target === 'aug') setnoteSettings({...noteSettings, isAug: !noteSettings.isAug})
-        if(target === 'dim') setnoteSettings({...noteSettings, isDim: !noteSettings.isDim})
+        if(target === 'aug') setnoteSettings({...noteSettings, isAug5th: !noteSettings.isAug5th})
+        if(target === 'dim') setnoteSettings({...noteSettings, isDim5th: !noteSettings.isDim5th})
         if(target === 'major7th') setnoteSettings({...noteSettings, isMajor7th: !noteSettings.isMajor7th})
         if(target === 'minor7th') setnoteSettings({...noteSettings, isMinor7th: !noteSettings.isMinor7th})
     }
@@ -55,10 +55,10 @@ const Pad = () => {
                     <PadButton text={"5"}  onClick={() => onClickNoteSetting('5th')} isTrue={noteSettings.is5th} />
                 </div>
                 <div className="col-span-1">
-                    <PadButton text={"aug"}  onClick={() => onClickNoteSetting('aug')} isTrue={noteSettings.isAug} />
+                    <PadButton text={"aug"}  onClick={() => onClickNoteSetting('aug')} isTrue={noteSettings.isAug5th} />
                 </div>
                 <div className="col-span-1">
-                    <PadButton text={"dim"}  onClick={() => onClickNoteSetting('dim')} isTrue={noteSettings.isDim} />
+                    <PadButton text={"dim"}  onClick={() => onClickNoteSetting('dim')} isTrue={noteSettings.isDim5th} />
                 </div>
                 <div className="col-span-1">
                     <PadButton text={"M7"}  onClick={() => onClickNoteSetting('major7th')} isTrue={noteSettings.isMajor7th} />
