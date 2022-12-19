@@ -2,19 +2,22 @@ import React, { useEffect } from 'react';
 import * as Tone from 'tone';
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
-import { isFlatAtom, isSharpAtom, playStateAtom } from '../atoms/atom';
-import { ChordCalculator } from '../util/ChordCalculator';
+import { flatNotationAtom, isSingleNoteFlatAtom, isSingleNoteSharpAtom, playStateAtom, sharpNotationAtom } from '../atoms/atom';
+import { Chord, ChordCalculator } from '../util/ChordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
 
 const chordCalculator = new ChordCalculator();
 
 const Main = () => {
-    const [note, setNote] = React.useState("X");
     const [beatCount, setBeatCount] = React.useState(0);
+    const [note, setNote] = React.useState("X");
+    const [notesInChord, setNotesInChord] = React.useState({noteId: "", note: ""});
     const [playState, setPlayState] = useAtom(playStateAtom);
-    const [isSharp, setIsSharp] = useAtom(isSharpAtom);
-    const [isFlat, setIsFlat] = useAtom(isFlatAtom);
+    const [isSingleNoteSharp, setIsSingleNoteSharp] = useAtom(isSingleNoteSharpAtom);
+    const [isSingleNoteFlat, setIsSingleNoteFlat] = useAtom(isSingleNoteFlatAtom);
+    const [sharpNotation, setSharpNotation] = useAtom(sharpNotationAtom);
+    const [flatNotation, setFlatNotation] = useAtom(flatNotationAtom);
     
     useKey(' ', () => {
         Tone.Transport.toggle();
@@ -35,6 +38,9 @@ const Main = () => {
         ]).start(0);
         part.loop = true;
 
+        chordCalculator.sharpNotaion = sharpNotation;
+        chordCalculator.flatNotaion = flatNotation;
+
         return () => { Tone.Transport.cancel(); setBeatCount(0); };
     }, [playState])
 
@@ -45,16 +51,49 @@ const Main = () => {
         setBeatCount(beat);
 
         if (beat === 0) {
-            const root = chordCalculator.getRandomRoot(isSharp, isFlat);
+            const root = chordCalculator.getRandomRoot(isSingleNoteSharp, isSingleNoteFlat);
             setNote(root.note.toString());
+            
+            const chord: Chord = {
+                rootNoteId: root.noteId,
+                _3rd: "major",
+                _5th: "none",
+                _7th: "none",
+                _9th: "none",
+                _11th: "none",
+                _13th: "none",
+            }
+            const notesInChord = chordCalculator.getNotesInCode(root, chord);
+            setNotesInChord({
+                noteId: (
+                    notesInChord.root.noteId.toString() + " " + 
+                    notesInChord._3rd?.noteId.toString() + " " + 
+                    notesInChord._5th?.noteId.toString() + " " + 
+                    notesInChord._7th?.noteId.toString() + " " + 
+                    notesInChord._9th?.noteId.toString() + " " + 
+                    notesInChord._11th?.noteId.toString() + " " + 
+                    notesInChord._13th?.noteId.toString()
+                ),
+                note: (
+                    notesInChord.root.note.toString() + " " + 
+                    notesInChord._3rd?.note.toString() + " " + 
+                    notesInChord._5th?.note.toString() + " " + 
+                    notesInChord._7th?.note.toString() + " " + 
+                    notesInChord._9th?.note.toString() + " " + 
+                    notesInChord._11th?.note.toString() + " " + 
+                    notesInChord._13th?.note.toString()
+                )
+            });
         }
     }
 
     return (
         <div className='border border-black h-full bg-[#000730] text-cyan-200 p-7'>
             <div className='text-4xl'>{beatCount + 1}</div>
-            <div className='text-5xl text-center'>{ parse(convertMusicalSymbols(note)) }</div>
-            <div className='text-2xl text-center'>{note}</div>
+            <div className='text-5xl text-center'>{ parse(note) }</div>
+            <div className='text-2xl text-center'>{ parse(notesInChord.note) }</div>
+            <div className='text-1xl text-center'>{notesInChord.noteId}</div>
+
             {/* <sub>7</sub><sup>(-5)</sup> */}
             {/* &#9837;	&#9839; */}
         </div>
