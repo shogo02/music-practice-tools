@@ -1,4 +1,5 @@
 import { MusicalConstants } from '../constants/musicalConstants'
+import { ChordSettings } from '../constants/type';
 
 export type Note = {
     noteId: number;
@@ -55,24 +56,23 @@ export const sharpFlatList = [2, 4, 7, 9, 11]
 
 
 export class ChordCalculator {
-    readonly MC = MusicalConstants;
-    readonly INTERVAL = this.MC.IntervalFromRoot;
+    readonly CHORD = MusicalConstants.CHORD;
 
     beforeRootNoteId = 0;
     flatOrSharpNotaition = '';
-    noteSettings = {}
+    chordSettings: ChordSettings | null = null;
 
-    getRandomRoot(isRootSharp?: boolean, isRootFlat?: boolean) {
+    getRandomRoot() {
         const shuffle = () => {
             const rootNote = normalRoot[this.getRandomNumber()];
 
             let patternList = [rootNote];
 
-            if (isRootSharp && rootNote.isAbleToRootSharp) {
+            if (this.chordSettings?._sharp.isTrue && rootNote.isAbleToRootSharp) {
                 const sharpNoteId = this.getNoteIdFromInterval(rootNote.noteId, 1);
                 patternList.push({noteId: sharpNoteId, note: rootNote.note + "#"});
             }
-            if (isRootFlat && rootNote.isAbleToRootFlat) {
+            if (this.chordSettings?._flat.isTrue && rootNote.isAbleToRootFlat) {
                 const flatNoteId = this.getNoteIdFromInterval(rootNote.noteId, -1);
                 patternList.push({noteId: flatNoteId, note: rootNote.note + "b"});
             }
@@ -88,6 +88,10 @@ export class ChordCalculator {
         this.beforeRootNoteId = result.noteId;
 
         return result;
+    }
+
+    getChord(rootNote: Note){
+
     }
 
     getNotesInCode(rootNote: Note, chord: Chord) {

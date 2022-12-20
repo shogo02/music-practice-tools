@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import * as Tone from 'tone';
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
-import { flatOrSharpNotaitionAtom, isSingleNoteFlatAtom, isSingleNoteSharpAtom, noteSettingsAtom, playStateAtom } from '../atoms/atom';
+import { flatOrSharpNotaitionAtom, chordSettingsAtom, playStateAtom } from '../atoms/atom';
 import { Chord, ChordCalculator } from '../util/chordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
@@ -14,10 +14,8 @@ const Main = () => {
     const [note, setNote] = React.useState("X");
     const [notesInChord, setNotesInChord] = React.useState({noteId: "", note: ""});
     const [playState, setPlayState] = useAtom(playStateAtom);
-    const [isSingleNoteSharp, setIsSingleNoteSharp] = useAtom(isSingleNoteSharpAtom);
-    const [isSingleNoteFlat, setIsSingleNoteFlat] = useAtom(isSingleNoteFlatAtom);
     const [flatOrSharpNotaition, setflatOrSharpNotaition] = useAtom(flatOrSharpNotaitionAtom);
-    const [noteSettings, setnoteSettings] = useAtom(noteSettingsAtom);
+    const [chordSettings, setChordSettingsAtom] = useAtom(chordSettingsAtom);
     
     useKey(' ', () => {
         Tone.Transport.toggle();
@@ -38,10 +36,10 @@ const Main = () => {
         part.loop = true;
 
         chordCalculator.flatOrSharpNotaition = flatOrSharpNotaition;
-        chordCalculator.noteSettings = noteSettings;
+        chordCalculator.chordSettings = chordSettings;
 
         return () => { Tone.Transport.cancel(); };
-    }, [playState, flatOrSharpNotaition, isSingleNoteSharp, isSingleNoteFlat])
+    }, [playState, flatOrSharpNotaition, chordSettings])
 
 
     const draw = () => {
@@ -50,7 +48,7 @@ const Main = () => {
         setBeatCount(beat);
 
         if (beat === 0) {
-            const root = chordCalculator.getRandomRoot(isSingleNoteSharp, isSingleNoteFlat);
+            const root = chordCalculator.getRandomRoot();
             setNote(root.note.toString());
             
             const chord: Chord = {
