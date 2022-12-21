@@ -34,7 +34,7 @@ const Pad = () => {
                     Object.entries(chordSettings).map(([key, value], index) => {
                         return (
                             <div className="col-span-1" key={key}>
-                                <PadButton id={'chord' + key} text={value.text} checked={value.isTrue} onChange={() => onClickChord(key)} />
+                                <PadButton id={'chord' + key} text={value.chordType} checked={value.isTrue} onChange={() => onClickChord(key)} />
                             </div>
                         );
                     })

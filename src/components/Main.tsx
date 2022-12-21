@@ -3,7 +3,7 @@ import * as Tone from 'tone';
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
 import { flatOrSharpNotaitionAtom, chordSettingsAtom, playStateAtom } from '../atoms/atom';
-import { Chord, ChordCalculator } from '../util/chordCalculator';
+import { ChordCalculator } from '../util/chordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
 
@@ -49,38 +49,11 @@ const Main = () => {
 
         if (beat === 0) {
             const root = chordCalculator.getRandomRoot();
-            setNote(root.note.toString());
             
-            const chord: Chord = {
-                rootNoteId: root.noteId,
-                _3rd: "major",
-                _5th: "none",
-                _7th: "none",
-                _9th: "none",
-                _11th: "none",
-                _13th: "none",
-            }
-            const notesInChord = chordCalculator.getNotesInCode(root, chord);
-            setNotesInChord({
-                noteId: (
-                    notesInChord.root.noteId.toString() + " " + 
-                    notesInChord._3rd?.noteId.toString() + " " + 
-                    notesInChord._5th?.noteId.toString() + " " + 
-                    notesInChord._7th?.noteId.toString() + " " + 
-                    notesInChord._9th?.noteId.toString() + " " + 
-                    notesInChord._11th?.noteId.toString() + " " + 
-                    notesInChord._13th?.noteId.toString()
-                ),
-                note: (
-                    notesInChord.root.note.toString() + " " + 
-                    notesInChord._3rd?.note.toString() + " " + 
-                    notesInChord._5th?.note.toString() + " " + 
-                    notesInChord._7th?.note.toString() + " " + 
-                    notesInChord._9th?.note.toString() + " " + 
-                    notesInChord._11th?.note.toString() + " " + 
-                    notesInChord._13th?.note.toString()
-                )
-            });
+            const chord = chordCalculator.getChord(root);
+            const tmpNotesInChord = chord?.notesInChord.map(e => e.noteName).join(" ") ?? "";
+            setNote(chord?.chordName ?? "not found");
+            setNotesInChord({noteId: "", note: tmpNotesInChord});
         }
     }
 
