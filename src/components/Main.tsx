@@ -6,8 +6,10 @@ import { flatOrSharpNotaitionAtom, chordSettingsAtom, playStateAtom } from '../a
 import { ChordCalculator } from '../util/chordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
+import { midiInit } from '../util/webMidiEnable';
 
 const chordCalculator = new ChordCalculator();
+
 
 const Main = () => {
     const [beatCount, setBeatCount] = React.useState(0);
@@ -21,6 +23,10 @@ const Main = () => {
         Tone.Transport.toggle();
         setPlayState(Tone.Transport.state.toString());
     });
+
+    useEffect(() => {
+        midiInit();
+    }, [])
 
     useEffect(() => {
         const synth = new Tone.Synth({ envelope: { release: 0.4 } }).toDestination();
