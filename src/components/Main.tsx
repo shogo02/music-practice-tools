@@ -6,7 +6,6 @@ import { flatOrSharpNotaitionAtom, chordSettingsAtom, playStateAtom } from '../a
 import { ChordCalculator } from '../util/ChordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
-import { midiInit } from '../util/webMidiEnable';
 import { WebMidi, Note } from "../../node_modules/webmidi/dist/esm/webmidi.esm";
 
 const chordCalculator = new ChordCalculator();
