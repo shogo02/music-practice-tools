@@ -1,15 +1,15 @@
 import { MusicalConstants } from '../constants/musicalConstants'
-import { Chord, ChordSettings, Note, RootNoteConfig } from '../constants/type';
+import { Chord, ChordSettings, NoteConfig, RootNoteConfig } from '../constants/type';
 
 
 export const normalRoot: Array<RootNoteConfig> = [
-    { noteId: 1, noteName: "C", isAbleToRootSharp: true, isAbleToRootFlat: false},
-    { noteId: 3, noteName: "D", isAbleToRootSharp: true, isAbleToRootFlat: true},
-    { noteId: 5, noteName: "E", isAbleToRootSharp: false, isAbleToRootFlat: true},
-    { noteId: 6, noteName: "F", isAbleToRootSharp: true, isAbleToRootFlat: false},
-    { noteId: 8, noteName: "G", isAbleToRootSharp: true, isAbleToRootFlat: true},
-    { noteId: 10, noteName: "A", isAbleToRootSharp: true, isAbleToRootFlat: true},
-    { noteId: 12, noteName: "B", isAbleToRootSharp: false, isAbleToRootFlat: true},
+    { noteId: 1, noteName: "C", isAbleToRootSharp: true, isAbleToRootFlat: false },
+    { noteId: 3, noteName: "D", isAbleToRootSharp: true, isAbleToRootFlat: true },
+    { noteId: 5, noteName: "E", isAbleToRootSharp: false, isAbleToRootFlat: true },
+    { noteId: 6, noteName: "F", isAbleToRootSharp: true, isAbleToRootFlat: false },
+    { noteId: 8, noteName: "G", isAbleToRootSharp: true, isAbleToRootFlat: true },
+    { noteId: 10, noteName: "A", isAbleToRootSharp: true, isAbleToRootFlat: true },
+    { noteId: 12, noteName: "B", isAbleToRootSharp: false, isAbleToRootFlat: true },
 ];
 
 export const sharpFlatList = [2, 4, 7, 9, 11]
@@ -21,7 +21,14 @@ export class ChordCalculator {
     beforeRootNoteId = 0;
     flatOrSharpNotaition = '';
     chordSettings: ChordSettings | null = null;
-    
+
+    static sortNoteName(noteNames: Array<string>) {
+        const order = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        const sortedNoteNames = noteNames.sort((a, b) => {
+            return order.indexOf(a) - order.indexOf(b);
+        })
+        return sortedNoteNames;
+    }
 
     getRandomRoot() {
         const shuffle = () => {
@@ -31,17 +38,17 @@ export class ChordCalculator {
 
             if (this.chordSettings?._sharp.isTrue && rootNote.isAbleToRootSharp) {
                 const sharpNoteId = this.getNoteIdFromInterval(rootNote.noteId, 1);
-                patternList.push({noteId: sharpNoteId, noteName: rootNote.noteName + "#"});
+                patternList.push({ noteId: sharpNoteId, noteName: rootNote.noteName + "#" });
             }
             if (this.chordSettings?._flat.isTrue && rootNote.isAbleToRootFlat) {
                 const flatNoteId = this.getNoteIdFromInterval(rootNote.noteId, -1);
-                patternList.push({noteId: flatNoteId, noteName: rootNote.noteName + "b"});
+                patternList.push({ noteId: flatNoteId, noteName: rootNote.noteName + "b" });
             }
             let index = this.getRandomNumber(patternList.length);
-            
+
             return patternList[index];
         }
-        
+
         let result = shuffle();
         while (this.beforeRootNoteId === result.noteId) {
             result = shuffle();
@@ -51,14 +58,14 @@ export class ChordCalculator {
         return result;
     }
 
-    getChord(rootNote: Note){
+    getChord(rootNote: NoteConfig) {
         const chordSettingsArray = Object.entries(this.chordSettings ?? {}).filter(([key, value]) => {
             return value.isTrue === true && key !== '_sharp' && key !== '_flat'; // TODO chordSettingsからsharpとflatはなくしたい
         });
         const chordSetting = chordSettingsArray[this.getRandomNumber(chordSettingsArray.length)];
-        const chordConfig = Object.entries(MusicalConstants.CHORD).find(([key, value]) => key === chordSetting[0] );
+        const chordConfig = Object.entries(MusicalConstants.CHORD).find(([key, value]) => key === chordSetting[0]);
 
-        if(!chordConfig) return;
+        if (!chordConfig) return;
 
         const notesInChord = this.getNotesInCode(rootNote, chordConfig?.[1]);
 
@@ -69,8 +76,8 @@ export class ChordCalculator {
         return resultChord;
     }
 
-    getNotesInCode(rootNote: Note, chordConfig: Array<number>) {
-        const result: Array<Note> = [];
+    getNotesInCode(rootNote: NoteConfig, chordConfig: Array<number>) {
+        const result: Array<NoteConfig> = [];
         chordConfig.forEach(e => {
             const interval = this.getNoteIdFromInterval(rootNote.noteId, e - 1);
             result.push({
@@ -94,7 +101,7 @@ export class ChordCalculator {
         if (isSharpOrFlat && this.flatOrSharpNotaition === 'sharp') {
             tmpNoteId = this.getNoteIdFromInterval(noteId, -1);
             note = normalRoot.find(e => e.noteId === tmpNoteId)?.noteName + "#";
-        }else if(isSharpOrFlat && this.flatOrSharpNotaition === 'flat'){
+        } else if (isSharpOrFlat && this.flatOrSharpNotaition === 'flat') {
             tmpNoteId = this.getNoteIdFromInterval(noteId, 1);
             note = normalRoot.find(e => e.noteId === tmpNoteId)?.noteName + "b";
         } else {
@@ -104,10 +111,10 @@ export class ChordCalculator {
         return note ?? "";
     }
 
-    getNoteIdFromInterval(noteId: number, interval: number){
+    getNoteIdFromInterval(noteId: number, interval: number) {
         let resultNoteId = noteId + interval;
-        if(resultNoteId < 1) resultNoteId = 12 - resultNoteId; 
-        if(resultNoteId > 12) resultNoteId = resultNoteId - 12;
+        if (resultNoteId < 1) resultNoteId = 12 - resultNoteId;
+        if (resultNoteId > 12) resultNoteId = resultNoteId - 12;
         return resultNoteId;
     }
 }

@@ -28,16 +28,16 @@ export type ChordSettings = {
     _m7shp5: ChordSettingElement;
 }
 
-export type Note = {
+export type NoteConfig = {
     noteId: number;
     noteName: string;
 }
-export type RootNoteConfig = Note & {
+export type RootNoteConfig = NoteConfig & {
     isAbleToRootSharp?: boolean;
     isAbleToRootFlat?: boolean;
 }
 
 export type Chord = {
     chordName: string;
-    notesInChord: Array<Note>;
+    notesInChord: Array<NoteConfig>;
 }

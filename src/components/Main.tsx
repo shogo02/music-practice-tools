@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
@@ -7,6 +7,7 @@ import { ChordCalculator } from '../util/ChordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
 import { midiInit } from '../util/webMidiEnable';
+import { WebMidi, Note } from "../../node_modules/webmidi/dist/esm/webmidi.esm";
 
 const chordCalculator = new ChordCalculator();
 
@@ -14,18 +15,24 @@ const chordCalculator = new ChordCalculator();
 const Main = () => {
     const [beatCount, setBeatCount] = React.useState(0);
     const [note, setNote] = React.useState("X");
-    const [notesInChord, setNotesInChord] = React.useState({noteId: "", note: ""});
+    const [notesInChord, setNotesInChord] = React.useState({ noteId: "", note: "X" });
     const [playState, setPlayState] = useAtom(playStateAtom);
     const [flatOrSharpNotaition, setflatOrSharpNotaition] = useAtom(flatOrSharpNotaitionAtom);
     const [chordSettings, setChordSettingsAtom] = useAtom(chordSettingsAtom);
-    
+    const [midiKey, setMidiKey] = useState<Array<Note>>([]);
+    const midiKeyRef = useRef<Array<Note>>([]);
+    midiKeyRef.current = midiKey;
+
     useKey(' ', () => {
         Tone.Transport.toggle();
         setPlayState(Tone.Transport.state.toString());
     });
 
     useEffect(() => {
-        midiInit();
+        WebMidi
+            .enable()
+            .then(mitiInit)
+            .catch(err => alert(err));
     }, [])
 
     useEffect(() => {
@@ -55,20 +62,39 @@ const Main = () => {
 
         if (beat === 0) {
             const root = chordCalculator.getRandomRoot();
-            
+
             const chord = chordCalculator.getChord(root);
             const tmpNotesInChord = chord?.notesInChord.map(e => e.noteName).join(" ") ?? "";
             setNote(chord?.chordName ?? "not found");
-            setNotesInChord({noteId: "", note: tmpNotesInChord});
+            setNotesInChord({ noteId: "", note: tmpNotesInChord });
         }
     }
+    
+    const mitiInit = () => {
+        const myInput = WebMidi.getInputByName("Digital Piano");
+        const synth = new Tone.PolySynth().toDestination();
+        myInput?.addListener("noteon", (e) => {
+            synth.triggerAttack(e.note.identifier);
+            setMidiKey([...midiKeyRef.current, e.note]);
+        });
+        myInput?.addListener("noteoff", (e) => {
+            synth.triggerRelease(e.note.identifier)
+            setMidiKey(midiKeyRef.current.filter(m => m.number !== e.note.number))
+        });
+    }
+    
+    const viewInputNote = midiKey.sort((a, b) => {
+        return (a.number < b.number) ? -1 : 1;
+    }).map(e => e.identifier).join(" ");
 
     return (
         <div className='border border-black h-full bg-[#000730] text-cyan-200 p-7'>
             <div className='text-4xl'>{beatCount + 1}</div>
-            <div className='text-5xl text-center'>{ parse(note) }</div>
-            <div className='text-2xl text-center'>{ parse(notesInChord.note) }</div>
+            <div className='text-6xl text-center'>{parse(convertMusicalSymbols(note))}</div>
+            <div className='text-4xl text-center'>{parse(convertMusicalSymbols(notesInChord.note))}</div>
             <div className='text-1xl text-center'>{notesInChord.noteId}</div>
+            <div className='text-1xl text-center'>{viewInputNote}</div>
+
 
             {/* <sub>7</sub><sup>(-5)</sup> */}
             {/* &#9837;	&#9839; */}
