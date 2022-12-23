@@ -7,3 +7,4 @@ export const playStateAtom = atom("stoped");
 export const accidentalAtom = atom('sharp');
 export const chordSettingsAtom = atom<ChordSettings>(MusicalConstants.CHORD_SETTINGS_INIT);
 export const midiNoteOnKeyAtom = atom<Array<Note>>([]);
+export const sustainOnAtom = atom(false);

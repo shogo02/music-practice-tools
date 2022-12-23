@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
-import { accidentalAtom, chordSettingsAtom, playStateAtom, midiNoteOnKeyAtom } from '../atoms/atom';
+import { accidentalAtom, chordSettingsAtom, playStateAtom, midiNoteOnKeyAtom, sustainOnAtom } from '../atoms/atom';
 import { ChordCalculator } from '../util/ChordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
@@ -16,15 +16,19 @@ const Main = () => {
     const [note, setNote] = React.useState("X");
     const [notesInChord, setNotesInChord] = React.useState({ noteId: "", note: "X" });
     const [playState, setPlayState] = useAtom(playStateAtom);
-    const [accidental, setAccidental] = useAtom(accidentalAtom);
     const [chordSettings, setChordSettingsAtom] = useAtom(chordSettingsAtom);
-    const [midiNoteOnKey, setMidiKey] = useAtom(midiNoteOnKeyAtom);
     
+    const [midiNoteOnKey, setMidiKey] = useAtom(midiNoteOnKeyAtom);
     const midiKeyRef = useRef<Array<Note>>([]);
     midiKeyRef.current = midiNoteOnKey;
     
+    const [accidental, setAccidental] = useAtom(accidentalAtom);
     const accidentalRef = useRef("");
     accidentalRef.current = accidental
+    
+    const [sustainOn, setSustainOn] = useAtom(sustainOnAtom);
+    const sustainOnRef = useRef(sustainOn);
+    sustainOnRef.current = sustainOn;
 
     useKey(' ', () => {
         Tone.Transport.toggle();
@@ -75,9 +79,10 @@ const Main = () => {
     
     const mitiInit = () => {
         WebMidi.inputs.forEach(input => console.log(input.manufacturer, input.name));
-        // const myInput = WebMidi.getInputByName("Digital Piano");
-        const myInput = WebMidi.getInputByName("Digital Keyboard");
+        const myInput = WebMidi.getInputByName("Digital Piano");
+        // const myInput = WebMidi.getInputByName("Digital Keyboard");
         const synth = new Tone.PolySynth().toDestination();
+        const sustainNotes: Array<Note> = []; 
         myInput?.addListener("noteon", (e) => {
             let tmpNote = e.note;
             if(tmpNote.accidental === "#" && accidentalRef.current === "flat") {
@@ -96,8 +101,14 @@ const Main = () => {
             synth.triggerRelease(tmpNote.identifier)
             setMidiKey(midiKeyRef.current.filter(m => m.number !== tmpNote.number))
         });
+
+        myInput?.addListener("controlchange", (e) => {
+            if (e.controller.number === 64) {
+                setSustainOn(!sustainOnRef.current);
+            }
+        })
     }
-    
+
     const viewInputNote = midiNoteOnKey.sort((a, b) => {
         return (a.number < b.number) ? -1 : 1;
     }).map(e => {
