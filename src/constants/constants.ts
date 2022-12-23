@@ -1,7 +1,7 @@
 
 export class InitialValues {
     static readonly BPM = 120;
-    static readonly VOLUME = -20;
+    static readonly VOLUME = -10;
 }
 
 export class Constants {
