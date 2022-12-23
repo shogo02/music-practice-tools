@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
-import { flatOrSharpNotaitionAtom, chordSettingsAtom, playStateAtom } from '../atoms/atom';
+import { accidentalAtom, chordSettingsAtom, playStateAtom, midiNoteOnKeyAtom } from '../atoms/atom';
 import { ChordCalculator } from '../util/ChordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
@@ -16,11 +16,15 @@ const Main = () => {
     const [note, setNote] = React.useState("X");
     const [notesInChord, setNotesInChord] = React.useState({ noteId: "", note: "X" });
     const [playState, setPlayState] = useAtom(playStateAtom);
-    const [flatOrSharpNotaition, setflatOrSharpNotaition] = useAtom(flatOrSharpNotaitionAtom);
+    const [accidental, setAccidental] = useAtom(accidentalAtom);
     const [chordSettings, setChordSettingsAtom] = useAtom(chordSettingsAtom);
-    const [midiKey, setMidiKey] = useState<Array<Note>>([]);
+    const [midiNoteOnKey, setMidiKey] = useAtom(midiNoteOnKeyAtom);
+    
     const midiKeyRef = useRef<Array<Note>>([]);
-    midiKeyRef.current = midiKey;
+    midiKeyRef.current = midiNoteOnKey;
+    
+    const accidentalRef = useRef("");
+    accidentalRef.current = accidental
 
     useKey(' ', () => {
         Tone.Transport.toggle();
@@ -47,11 +51,11 @@ const Main = () => {
         ]).start(0);
         part.loop = true;
 
-        chordCalculator.flatOrSharpNotaition = flatOrSharpNotaition;
+        chordCalculator.accidental = accidental;
         chordCalculator.chordSettings = chordSettings;
 
         return () => { Tone.Transport.cancel(); };
-    }, [playState, flatOrSharpNotaition, chordSettings])
+    }, [playState, accidental, chordSettings])
 
 
     const draw = () => {
@@ -70,21 +74,37 @@ const Main = () => {
     }
     
     const mitiInit = () => {
-        const myInput = WebMidi.getInputByName("Digital Piano");
+        WebMidi.inputs.forEach(input => console.log(input.manufacturer, input.name));
+        // const myInput = WebMidi.getInputByName("Digital Piano");
+        const myInput = WebMidi.getInputByName("Digital Keyboard");
         const synth = new Tone.PolySynth().toDestination();
         myInput?.addListener("noteon", (e) => {
-            synth.triggerAttack(e.note.identifier);
-            setMidiKey([...midiKeyRef.current, e.note]);
+            let tmpNote = e.note;
+            if(tmpNote.accidental === "#" && accidentalRef.current === "flat") {
+                tmpNote = new Note(e.note.getOffsetNumber(0, 1));
+                tmpNote.accidental = 'b'
+            }
+            synth.triggerAttack(tmpNote.identifier);
+            setMidiKey([...midiKeyRef.current, tmpNote]);
         });
         myInput?.addListener("noteoff", (e) => {
-            synth.triggerRelease(e.note.identifier)
-            setMidiKey(midiKeyRef.current.filter(m => m.number !== e.note.number))
+            let tmpNote = e.note;
+            if(tmpNote.accidental === "#" && accidentalRef.current === "flat") {
+                tmpNote = new Note(e.note.getOffsetNumber(0, 1));
+                tmpNote.accidental = 'b'
+            }
+            synth.triggerRelease(tmpNote.identifier)
+            setMidiKey(midiKeyRef.current.filter(m => m.number !== tmpNote.number))
         });
     }
     
-    const viewInputNote = midiKey.sort((a, b) => {
+    const viewInputNote = midiNoteOnKey.sort((a, b) => {
         return (a.number < b.number) ? -1 : 1;
-    }).map(e => e.identifier).join(" ");
+    }).map(e => {
+        let tmpAccidental = e.accidental ?? "";
+        return e.name + tmpAccidental;
+    }).join(" ");
+
 
     return (
         <div className='border border-black h-full bg-[#000730] text-cyan-200 p-7'>

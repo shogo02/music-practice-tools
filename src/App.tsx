@@ -1,9 +1,9 @@
-import KeyBoard from './components/KeyBoard';
 import Main from './components/Main'
 import Mixer from './components/Mixer';
 import Nob from './components/Nob';
 import Pad from './components/Pad';
 import { Provider } from 'jotai';
+import KeyBoard from './components/keyboard/KeyBoard';
 
 function App() {
     return (

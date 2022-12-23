@@ -1,17 +1,17 @@
 import { useAtom } from "jotai";
-import { flatOrSharpNotaitionAtom } from "../atoms/atom";
+import { accidentalAtom } from "../atoms/atom";
 import ToggleButton from "./Parts.tsx/ToggleButton"
 
 
 const Nob = () => {
-    const [flatOrSharpNotaition, setflatOrSharpNotaition] = useAtom(flatOrSharpNotaitionAtom);
+    const [accidental, setAccidental] = useAtom(accidentalAtom);
     const onClickFlatOrSharpNotation = () => {
-        flatOrSharpNotaition === 'sharp' ? setflatOrSharpNotaition('flat') : setflatOrSharpNotaition('sharp')
+        accidental === 'sharp' ? setAccidental('flat') : setAccidental('sharp')
     }
     return (
         <div>
             Nob
-            <ToggleButton onClick={onClickFlatOrSharpNotation} trueText={'#'} falseText={'b'} isTrue={flatOrSharpNotaition === 'sharp'} />
+            <ToggleButton onClick={onClickFlatOrSharpNotation} trueText={'#'} falseText={'b'} isTrue={accidental === 'sharp'} />
         </div>
     )
 }

@@ -19,7 +19,7 @@ export class ChordCalculator {
     readonly CHORD = MusicalConstants.CHORD;
 
     beforeRootNoteId = 0;
-    flatOrSharpNotaition = '';
+    accidental = '';
     chordSettings: ChordSettings | null = null;
 
     static sortNoteName(noteNames: Array<string>) {
@@ -98,10 +98,10 @@ export class ChordCalculator {
         let note = "";
 
         const isSharpOrFlat = sharpFlatList.indexOf(noteId) < 0 ? false : true;
-        if (isSharpOrFlat && this.flatOrSharpNotaition === 'sharp') {
+        if (isSharpOrFlat && this.accidental === 'sharp') {
             tmpNoteId = this.getNoteIdFromInterval(noteId, -1);
             note = normalRoot.find(e => e.noteId === tmpNoteId)?.noteName + "#";
-        } else if (isSharpOrFlat && this.flatOrSharpNotaition === 'flat') {
+        } else if (isSharpOrFlat && this.accidental === 'flat') {
             tmpNoteId = this.getNoteIdFromInterval(noteId, 1);
             note = normalRoot.find(e => e.noteId === tmpNoteId)?.noteName + "b";
         } else {
