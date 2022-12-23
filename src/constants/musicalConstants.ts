@@ -26,7 +26,7 @@ export class MusicalConstants {
     }
 
     static readonly CHORD = {
-        _power: [1, 5],
+        _power: [1, 8],
         _M: [1, 5, 8],
         _m: [1, 4, 8],
         _dim: [1, 4, 7],
@@ -52,4 +52,6 @@ export class MusicalConstants {
         51, 54, 56, 58, 61, 63, 66, 68, 70, 73, 75, 78, 80, 82, 85, 87, 90, 92, 94, 97, 
         99, 102, 104, 106, 109, 111, 114, 116, 118, 121, 123, 126
     ];
+
+    static readonly NATURAL_ROOT = ["C", "D", "E", "F", "G", "A", "B"];
 }
