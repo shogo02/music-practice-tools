@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { accidentalAtom } from "../atoms/atom";
-import ToggleButton from "./Parts.tsx/ToggleButton"
+import ToggleButton from "./parts/ToggleButton"
 
 
 const Nob = () => {

@@ -4,7 +4,7 @@ import * as Tone from 'tone';
 import { chordSettingsAtom, playStateAtom } from '../atoms/atom';
 import { MusicalConstants } from "../constants/musicalConstants";
 import { ChordSettings } from "../constants/type";
-import PadButton from "./Parts.tsx/PadButton";
+import PadButton from "./parts/PadButton";
 
 const Pad = () => {
     const [playState, setPlayState] = useAtom(playStateAtom);
