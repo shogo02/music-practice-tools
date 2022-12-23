@@ -12,9 +12,12 @@ const chordCalculator = new ChordCalculator();
 
 
 const Main = () => {
-    const [beatCount, setBeatCount] = React.useState(0);
-    const [note, setNote] = React.useState("X");
-    const [notesInChord, setNotesInChord] = React.useState({ noteId: "", note: "X" });
+    const [beatCount, setBeatCount] = useState(0);
+    const [notesInChord, setNotesInChord] = useState({
+        chordName: "X",
+        notesInChordName: "X",
+        notesInChordDegree: "X"
+    });
     const [playState, setPlayState] = useAtom(playStateAtom);
     const [chordSettings, setChordSettingsAtom] = useAtom(chordSettingsAtom);
     
@@ -68,36 +71,29 @@ const Main = () => {
         setBeatCount(beat);
 
         if (beat === 0) {
-            const root = chordCalculator.getRandomRoot();
-
-            const chord = chordCalculator.getChord(root);
-            const tmpNotesInChord = chord?.notesInChord.map(e => e.noteName).join(" ") ?? "";
-            setNote(chord?.chordName ?? "not found");
-            setNotesInChord({ noteId: "", note: tmpNotesInChord });
+            const randomChord = chordCalculator.createRandomChord();
+            setNotesInChord({
+                chordName: randomChord.chordName,
+                notesInChordName: randomChord.notesInChordName.join(" "),
+                notesInChordDegree: randomChord.notesInChordDegree.join(" ")
+            });
         }
     }
     
     const mitiInit = () => {
         WebMidi.inputs.forEach(input => console.log(input.manufacturer, input.name));
-        const myInput = WebMidi.getInputByName("Digital Piano");
+        // const myInput = WebMidi.getInputByName("Digital Piano");
         // const myInput = WebMidi.getInputByName("Digital Keyboard");
+        const myInput = WebMidi.getInputByName("MKII V49");
         const synth = new Tone.PolySynth().toDestination();
-        const sustainNotes: Array<Note> = []; 
+        
         myInput?.addListener("noteon", (e) => {
-            let tmpNote = e.note;
-            if(tmpNote.accidental === "#" && accidentalRef.current === "flat") {
-                tmpNote = new Note(e.note.getOffsetNumber(0, 1));
-                tmpNote.accidental = 'b'
-            }
+            let tmpNote = chordCalculator.convertToFlatNotes([e.note])[0];
             synth.triggerAttack(tmpNote.identifier);
             setMidiKey([...midiKeyRef.current, tmpNote]);
         });
         myInput?.addListener("noteoff", (e) => {
-            let tmpNote = e.note;
-            if(tmpNote.accidental === "#" && accidentalRef.current === "flat") {
-                tmpNote = new Note(e.note.getOffsetNumber(0, 1));
-                tmpNote.accidental = 'b'
-            }
+            let tmpNote = chordCalculator.convertToFlatNotes([e.note])[0];
             synth.triggerRelease(tmpNote.identifier)
             setMidiKey(midiKeyRef.current.filter(m => m.number !== tmpNote.number))
         });
@@ -120,10 +116,10 @@ const Main = () => {
     return (
         <div className='border border-black h-full bg-[#000730] text-cyan-200 p-7'>
             <div className='text-4xl'>{beatCount + 1}</div>
-            <div className='text-6xl text-center'>{parse(convertMusicalSymbols(note))}</div>
-            <div className='text-4xl text-center'>{parse(convertMusicalSymbols(notesInChord.note))}</div>
-            <div className='text-1xl text-center'>{notesInChord.noteId}</div>
-            <div className='text-1xl text-center'>{viewInputNote}</div>
+            <div className='text-6xl text-center'>{parse(convertMusicalSymbols(notesInChord.chordName))}</div>
+            <div className='text-4xl text-center'>{parse(convertMusicalSymbols(notesInChord.notesInChordName))}</div>
+            <div className='text-3xl text-center'>{notesInChord.notesInChordDegree}</div>
+            <div className='text-3xl text-center'>{parse(convertMusicalSymbols(viewInputNote))}</div>
 
 
             {/* <sub>7</sub><sup>(-5)</sup> */}

@@ -39,5 +39,6 @@ export type RootNoteConfig = NoteConfig & {
 
 export type Chord = {
     chordName: string;
-    notesInChord: Array<NoteConfig>;
+    notesInChordName: Array<string>;
+    notesInChordDegree: Array<number>;
 }
