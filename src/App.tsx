@@ -2,7 +2,6 @@ import Main from './components/Main'
 import Mixer from './components/Mixer';
 import Nob from './components/Nob';
 import Pad from './components/Pad';
-import { Provider } from 'jotai';
 import KeyBoard from './components/keyboard/KeyBoard';
 import PcKeyController from './components/PcKeyController';
 

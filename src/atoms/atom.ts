@@ -1,4 +1,3 @@
-import { atom } from 'jotai'
 import { ChordSettings, PcKeyToMidiMap } from '../constants/type';
 import { MusicalConstants } from '../constants/musicalConstants'
 import { Note } from "../../node_modules/webmidi/dist/esm/webmidi.esm";

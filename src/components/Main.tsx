@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
-import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
 import { accidentalAtom, chordSettingsAtom, playStateAtom, midiNoteOnKeyAtom, pcKeyToMidiMapAtom, pcKeyToMidiOffsetAtom } from '../atoms/atom';
 import { ChordCalculator } from '../util/ChordCalculator';

@@ -1,6 +1,4 @@
 
-import { useAtom } from 'jotai';
-import React from 'react'
 import { midiNoteOnKeyAtom, pcKeyPressAtom, pcKeyToMidiMapAtom, pcKeyToMidiOffsetAtom } from '../../atoms/atom';
 import { InitialValues } from '../../constants/constants';
 import Key from './Key'
