@@ -1,32 +1,24 @@
 
-export type ChordSettingElement = {
-    isTrue: boolean,
-    chordType: string,
-}
+export type ChordKeyName = 
+    "power" | "major" | "minor" | "dim" | "aug" | "sus2" | "sus4" | "6" | "m6"
+    | "7" | "M7" | "m7" | "mM7" | "aug7" | "dim7" | "7b5" | "7shp5" | "m7b5" | "m7shp5";
 
-export type ChordSettings = {
-    _sharp: ChordSettingElement;
-    _flat: ChordSettingElement;
-    _power: ChordSettingElement;
-    _M: ChordSettingElement;
-    _m: ChordSettingElement;
-    _dim: ChordSettingElement;
-    _aug: ChordSettingElement;
-    _sus2: ChordSettingElement;
-    _sus4: ChordSettingElement;
-    _6: ChordSettingElement;
-    _m6: ChordSettingElement;
-    _7: ChordSettingElement;
-    _M7: ChordSettingElement;
-    _m7: ChordSettingElement;
-    _mM7: ChordSettingElement;
-    _aug7: ChordSettingElement;
-    _dim7: ChordSettingElement;
-    _7b5: ChordSettingElement;
-    _7shp5: ChordSettingElement;
-    _m7b5: ChordSettingElement;
-    _m7shp5: ChordSettingElement;
+export type ChordSettingElement = {
+    key: ChordKeyName,
+    chordAttachName: string,
+    buttonDisplayName: string,
 }
+export type ChordSettings = Array<ChordSettingElement>;
+
+
+export type NotesInChordElement = {
+    key: ChordKeyName,
+    notesInChord: Array<number>
+}
+export type NotesInChordConfig = Array<NotesInChordElement>
+
+
+
 
 export type NoteConfig = {
     noteId: number;

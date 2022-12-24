@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Slider } from '@mui/material';
 import * as Tone from 'tone';
 import { InitialValues, Constants } from '../constants/constants';

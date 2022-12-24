@@ -1,14 +1,11 @@
-// import { pcKeyToMidiOffsetAtom } from "../atoms/atom";
+import { accidentalHandler } from "../stateController/GlobalController";
 import BpmSlider from "./BpmSlider"
 
 
 const Mixer = () => {
-    // const [pcKeyToMidiOffset, setPcKeyToMidiOffset] = useAtom(pcKeyToMidiOffsetAtom);
-
-    const pcKeyOffSetChange = (e: string) => {
-        console.log(e);
-        // setPcKeyToMidiOffset(Number(e));
-    }
+    // TODO とりあえず、プルダウン実装。あとで変える
+    const pullDown = ["natural", "sharp", "flat"];
+    
 
     return (
         <div className="p-3 flex flex-col justify-center">
@@ -19,12 +16,15 @@ const Mixer = () => {
                 <input
                     // value={pcKeyToMidiOffset}
                     type="number"
-                    onChange={(e) => pcKeyOffSetChange(e.target.value)}
+                    // onChange={(e) => pcKeyOffSetChange(e.target.value)}
                     min="36"
                     max="48"
                     className='w-1/2'
                 />
             </div>
+            <select onChange={(e) => accidentalHandler(e.target.value)}>
+                { pullDown.map((e) => <option key={e} value={e}>{e}</option>) }
+            </select>
         </div>
     )
 }

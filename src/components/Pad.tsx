@@ -1,42 +1,28 @@
-import { useState } from "react";
-import * as Tone from 'tone';
-// import { chordSettingsAtom, playStateAtom } from '../atoms/atom';
-import { MusicalConstants } from "../constants/musicalConstants";
-import { ChordSettings } from "../constants/type";
+import { chordSettingsState, isPlayState, chordSettingsHanler, toggleTransport } from "../stateController/GlobalController";
 import PadButton from "./parts/PadButton";
+import { useSnapshot } from 'valtio'
+import { Constants } from "../constants/constants";
 
+const chordSettingConfig = Constants.CHORD_SETTINGS_INIT;
 const Pad = () => {
-    // const [playState, setPlayState] = useAtom(playStateAtom);
-    // const [chordSettings, setChordSettings] = useAtom(chordSettingsAtom);
-
-    // const onClickPlay = () => {
-    //     Tone.Transport.toggle();
-    //     const transportState = Tone.Transport.state.toString();
-    //     setPlayState(transportState);
-    // }
-
-    // const onClickChord = (positionKey: string) => {
-    //     let updatedChordSettings = Object.entries(chordSettings);
-    //     // updatedChordSettings.forEach(([key, value], index) => {
-    //     //     if(key === positionKey) value.isTrue = !value.isTrue;
-    //     // })
-    //     setChordSettings(Object.fromEntries(updatedChordSettings) as ChordSettings);
-    // };
+    const isPlayMetronome = useSnapshot(isPlayState).isPlatMetronome;
+    const enableChord = useSnapshot(chordSettingsState).enableChord;
 
     return (
         <div className="mt-5 mx-6">
             <div className="grid grid-cols-3 gap-5">
                 <div className="col-span-3">
-                    {/* <PadButton id='play' text={playState === "started" ? "■" : "▶"} onChange={onClickPlay} checked={playState === "started" ? true : false} /> */}
+                    <PadButton id='play' text={isPlayMetronome ? "■" : "▶"} onChange={toggleTransport} checked={isPlayMetronome} />
                 </div>
                 {
-                    // Object.entries(chordSettings).map(([key, value], index) => {
-                    //     return (
-                    //         <div className="col-span-1" key={key}>
-                    //             {/* <PadButton id={'chord' + key} text={value.chordType} checked={value.isTrue} onChange={() => onClickChord(key)} /> */}
-                    //         </div>
-                    //     );
-                    // })
+                    chordSettingConfig.map(e => {
+                        const checked = enableChord.find(e2 => e2 === e.key) ? true : false;
+                        return (
+                            <div className="col-span-1" key={e.key}>
+                                <PadButton id={'chord' + e.key} text={e.buttonDisplayName} checked={checked} onChange={() => chordSettingsHanler(e.key)} />
+                            </div>
+                        );
+                    })
                 }
             </div>
         </div>

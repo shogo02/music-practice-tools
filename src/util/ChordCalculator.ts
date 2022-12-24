@@ -1,93 +1,82 @@
-import { MusicalConstants } from '../constants/musicalConstants'
 import { Chord, ChordSettings } from '../constants/type';
 import { Note } from "../../node_modules/webmidi/dist/esm/webmidi.esm";
 import { Constants } from '../constants/constants';
+import { accidentalState, beforeRootNoteHandler, beforeRootNoteState, chordSettingsState } from '../stateController/GlobalController';
 
-export class ChordCalculator {
-    private readonly CHORD = MusicalConstants.CHORD;
-    private readonly NATURAL_ROOT = MusicalConstants.NATURAL_ROOT
+const NATURAL_ROOT = Constants.NATURAL_ROOT
+const NOTES_IN_CHORD_CONFIG = Constants.NOTES_IN_CHORD_CONFIG;
+const CHORD_SETTINGS_INIT = Constants.CHORD_SETTINGS_INIT
 
-    beforeRootNoteName = "";
-    accidental = '';
-    chordSettings: ChordSettings | null = null;
 
-    getRandomRoot() {
-        const shuffle = () => {
-            const rootNoteName = this.NATURAL_ROOT[this.getRandomNumber(this.NATURAL_ROOT.length)];
-            const rootNote = new Note(rootNoteName + "1");
-            const pattern = ["natural"];
-            if (this.chordSettings?._sharp.isTrue && !["E", "B"].includes(rootNote.name)) pattern.push("sharp");
-            if (this.chordSettings?._flat.isTrue && !["C", "F"].includes(rootNote.name)) pattern.push("flat");
+export const getRandomRoot = () => {
+    const accidental = accidentalState.selectedAccidental;
+    const beforeRootNote = beforeRootNoteState.beforeRootNote;
+    const shuffle = () => {
+        const rootNoteName = NATURAL_ROOT[getRandomNumber(NATURAL_ROOT.length)];
+        const rootNote = new Note(rootNoteName + "1");
+        const pattern = ["natural"];
+        if (accidental.includes("sharp") && !["E", "B"].includes(rootNote.name)) pattern.push("sharp");
+        if (accidental.includes("flat") && !["C", "F"].includes(rootNote.name)) pattern.push("flat");
 
-            switch (pattern[this.getRandomNumber(pattern.length)]) {
-                case "sharp":
-                    rootNote.accidental = '#';
-                    break;
-                case "flat":
-                    rootNote.accidental = 'b';
-                    break;
-            }
-            return rootNote;
+        switch (pattern[getRandomNumber(pattern.length)]) {
+            case "sharp":
+                rootNote.accidental = '#';
+                break;
+            case "flat":
+                rootNote.accidental = 'b';
+                break;
         }
-        
-        let result = shuffle();
-        while (this.beforeRootNoteName === result.identifier) {
-            result = shuffle();
+        return rootNote;
+    }
+    
+    let result = shuffle();
+    while (beforeRootNote?.identifier === result.identifier) {
+        result = shuffle();
+    }
+    beforeRootNoteHandler(result);
+
+    return result;
+}
+
+
+
+export const createRandomChord = (rootNote?: Note): Chord => {
+    const tmpRootNote = rootNote ?? getRandomRoot();
+    const chordSettings = chordSettingsState.enableChord;
+    const chordSettingKey = chordSettings[getRandomNumber(chordSettings.length)];
+    const chordConfig = NOTES_IN_CHORD_CONFIG.find(e => e.key === chordSettingKey);
+    if(!chordConfig) throw new Error(`not found chord config.`);
+    const notesInChord = convertToFlatNotes(createNotesInChord(tmpRootNote, chordConfig?.notesInChord));
+    const rootNoteName = tmpRootNote.name + (tmpRootNote.accidental ?? "");
+    
+    return {
+        chordName: rootNoteName + CHORD_SETTINGS_INIT.find(e => e.key === chordSettingKey)?.chordAttachName,
+        notesInChordName: notesInChord.map(e => e.name + (e.accidental ?? "")),
+        notesInChordDegree: chordConfig?.notesInChord
+    }
+}
+
+export const getRandomNumber = (max: number) => {
+    return Math.floor(Math.random() * max);
+}
+
+export const convertToFlatNotes = (notes: Array<Note>) => {
+    const accidental = accidentalState.selectedAccidental;
+    if(accidental !== "flat") return notes;
+
+    return notes.map(e => {
+        if(e.accidental === "#") {
+            e = new Note(e.getOffsetNumber(0, 1))
+            e.accidental = "b"
         }
-        this.beforeRootNoteName = result.identifier;
+        return e
+    })
+}
 
-        return result;
-    }
-
-    createRandomChord(rootNote?: Note): Chord {
-        const tmpRootNote = rootNote ?? this.getRandomRoot();
-
-        const chordSettingsArray = Object.entries(this.chordSettings ?? {}).filter(([key, value]) => {
-            return value.isTrue === true && key !== '_sharp' && key !== '_flat'; // TODO chordSettingsからsharpとflatはなくしたい
-        });
-        const chordSetting = chordSettingsArray[this.getRandomNumber(chordSettingsArray.length)];
-        const chordConfig = Object.entries(this.CHORD).find(([key, value]) => key === chordSetting[0]) ?? ["", []];
-        
-        const notesInChord = this.convertToFlatNotes(this.createNotesInChord(tmpRootNote, chordConfig[1]));
-        const rootNoteName = tmpRootNote.name + (tmpRootNote.accidental ?? "");
-
-        return {
-            chordName: rootNoteName + (chordSetting[1].chordType === "M" ? "" : chordSetting[1].chordType),
-            notesInChordName: notesInChord.map(e => e.name + (e.accidental ?? "")),
-            notesInChordDegree: chordConfig[1]
-        }
-    }
-
-    createNotesInChord(rootNote: Note, chordConfig: Array<number>) {
-        const result: Array<Note> = [];
-        chordConfig.forEach(e => {
-            result.push(new Note(rootNote.getOffsetNumber(0, e - 1)));
-        })
-        return result;
-    }
-
-    convertToFlatNotes(notes: Array<Note>) {
-        if(this.accidental !== "flat") return notes;
-
-        return notes.map(e => {
-            if(e.accidental === "#") {
-                e = new Note(e.getOffsetNumber(0, 1))
-                e.accidental = "b"
-            }
-            return e
-        })
-    }
-
-    getRandomNumber(max: number) {
-        return Math.floor(Math.random() * max);
-    }
-
-    getPcKeyToMidiMap(offSet: number = 0) {
-        return Constants.PCKeyToMidi.map((e, index) => {
-            return {
-                midiNumber: index + offSet,
-                pcKey: e
-            }
-        })
-    }
+export const createNotesInChord = (rootNote: Note, chordConfig: Array<number>) => {
+    const result: Array<Note> = [];
+    chordConfig.forEach(e => {
+        result.push(new Note(rootNote.getOffsetNumber(0, e - 1)));
+    })
+    return result;
 }
