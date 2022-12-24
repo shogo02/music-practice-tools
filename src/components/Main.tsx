@@ -11,7 +11,7 @@ const Main = () => {
     const displayPlayNotes = playNotes.sort((a, b) => {
         return (a.number < b.number) ? -1 : 1;
     }).map(e => e.name + (e.accidental ?? ""));
-    
+
     return (
         <div className='border border-black h-full bg-[#000730] text-cyan-200 p-7'>
             <div className='text-4xl'>{beatPosition}</div>

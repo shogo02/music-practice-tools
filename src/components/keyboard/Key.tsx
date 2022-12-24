@@ -10,7 +10,7 @@ type KeyProps = {
 function Key(props: KeyProps) {
     const displayNoteName = (props.playNote?.name ?? "") + (props.playNote?.accidental ?? "")
     let addClassName = "";
-    if (Constants.midiHalfNoteNumber.find(e => e === props.midiNumber)) {
+    if (Constants.MIDI_HALF_NOTE_NUMBER.find(e => e === props.midiNumber)) {
         addClassName += "h-20 w-7 mx-[-14px] bg-slate-600 z-10 ";
     } else {
         addClassName += "h-36 w-10  ";

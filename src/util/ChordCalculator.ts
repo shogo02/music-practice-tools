@@ -1,7 +1,7 @@
-import { Chord, ChordSettings } from '../constants/type';
+import { Chord } from '../constants/type';
 import { Note } from "../../node_modules/webmidi/dist/esm/webmidi.esm";
 import { Constants } from '../constants/constants';
-import { accidentalState, beforeRootNoteHandler, beforeRootNoteState, chordSettingsState } from '../stateController/GlobalController';
+import { accidentalState, beforeRootNoteHandler, beforeRootNoteState, chordSettingsState, pcKeyOffSetState } from '../stateController/GlobalController';
 
 const NATURAL_ROOT = Constants.NATURAL_ROOT
 const NOTES_IN_CHORD_CONFIG = Constants.NOTES_IN_CHORD_CONFIG;
@@ -79,4 +79,23 @@ export const createNotesInChord = (rootNote: Note, chordConfig: Array<number>) =
         result.push(new Note(rootNote.getOffsetNumber(0, e - 1)));
     })
     return result;
+}
+
+export const pcKeyToNote = (key: string) => {
+    const pcKey = Constants.PC_KEY;
+    const pcKeyOffSet = pcKeyOffSetState.pcKeyOffSet + 37;
+
+    let index = pcKey[0].findIndex((value) => value == key);
+    if(index >= 0) {
+        let tmpNote = new Note(index);
+        return new Note(tmpNote.getOffsetNumber(4))
+    }
+
+    index = pcKey[1].findIndex((value) => value === key);
+    if(index >= 0) {
+        let tmpNote = new Note(index);
+        return new Note(tmpNote.getOffsetNumber(5));
+    }
+    
+    return ;
 }

@@ -3,6 +3,7 @@ import Mixer from './components/Mixer';
 import Nob from './components/Nob';
 import Pad from './components/Pad';
 import KeyBoard from './components/keyboard/KeyBoard';
+import PcKeyController from './components/PcKeyController';
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
             <div className='h-1/4 border border-black'>
                 <KeyBoard />
             </div>
+            <PcKeyController />
         </div>
     );
 }
