@@ -85,24 +85,26 @@ export const pcKeyOffSetState = proxy({ pcKeyOffSet: 0 });
 
 let pressingKey: Array<string> = [];
 export const keyDownHanler = (event: KeyboardEvent) => {
-    if (Constants.PC_KEY.flatMap(e => e).includes(event.key) && !pressingKey.includes(event.key)) {
+    if(pressingKey.includes(event.key)) return;
+    if (Constants.PC_KEY.flatMap(e => e).includes(event.key)) {
         const note = pcKeyToNote(event.key);
         if(!note) throw new Error("faild pc key to note.")
-
         noteOn(note);
-
-        pressingKey.push(event.key);
     }
+
+    if(event.key === " "){
+        toggleTransport();
+    }
+
+    pressingKey.push(event.key);
 }
 export const keyUpHanler = (event: KeyboardEvent) => {
     if (Constants.PC_KEY.flatMap(e => e).includes(event.key)) {
         const note = pcKeyToNote(event.key);
         if(!note) throw new Error("faild pc key to note.")
-        
         noteOff(note);
-
-        pressingKey = pressingKey.filter(e => e !== event.key);
     }
+    pressingKey = pressingKey.filter(e => e !== event.key);
 }
 
 const noteOn = (note: Note) => {
