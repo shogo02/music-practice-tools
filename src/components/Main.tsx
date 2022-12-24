@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { useAtom } from 'jotai';
 import { useKey } from 'react-use';
-import { accidentalAtom, chordSettingsAtom, playStateAtom, midiNoteOnKeyAtom } from '../atoms/atom';
+import { accidentalAtom, chordSettingsAtom, playStateAtom, midiNoteOnKeyAtom, pcKeyToMidiMapAtom, pcKeyToMidiOffsetAtom } from '../atoms/atom';
 import { ChordCalculator } from '../util/ChordCalculator';
 import parse, { domToReact } from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
@@ -19,12 +19,14 @@ const Main = () => {
         notesInChordDegree: "X"
     });
     const [playState, setPlayState] = useAtom(playStateAtom);
-    const [chordSettings, setChordSettingsAtom] = useAtom(chordSettingsAtom);
-    
+    const [chordSettings, setChordSettings] = useAtom(chordSettingsAtom);
+    const [pcKeyToMidiMap, setPcKeyToMidiMap] = useAtom(pcKeyToMidiMapAtom);
+    const [pcKeyToMidiOffset, setPcKeyToMidiOffset] = useAtom(pcKeyToMidiOffsetAtom);
+
     const [midiNoteOnKey, setMidiKey] = useAtom(midiNoteOnKeyAtom);
     const midiKeyRef = useRef<Array<Note>>([]);
     midiKeyRef.current = midiNoteOnKey;
-    
+
     const [accidental, setAccidental] = useAtom(accidentalAtom);
     const accidentalRef = useRef("");
     accidentalRef.current = accidental
@@ -40,6 +42,10 @@ const Main = () => {
             .then(mitiInit)
             .catch(err => alert(err));
     }, [])
+
+    useEffect(() => {
+        setPcKeyToMidiMap(chordCalculator.getPcKeyToMidiMap(pcKeyToMidiOffset));
+    }, [pcKeyToMidiOffset])
 
     useEffect(() => {
         const synth = new Tone.Synth({ envelope: { release: 0.4 } }).toDestination();
@@ -75,14 +81,14 @@ const Main = () => {
             });
         }
     }
-    
+
     const mitiInit = () => {
         WebMidi.inputs.forEach(input => console.log(input.manufacturer, input.name));
         // const myInput = WebMidi.getInputByName("Digital Piano");
         // const myInput = WebMidi.getInputByName("Digital Keyboard");
         const myInput = WebMidi.getInputByName("MKII V49");
         const synth = new Tone.PolySynth().toDestination();
-        
+
         myInput?.addListener("noteon", (e) => {
             let tmpNote = chordCalculator.convertToFlatNotes([e.note])[0];
             synth.triggerAttack(tmpNote.identifier);
