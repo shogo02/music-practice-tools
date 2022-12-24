@@ -1,8 +1,7 @@
-import { useAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { useKey } from "react-use";
 import { Note } from "../../../node_modules/webmidi/dist/esm/webmidi.esm";
-import { accidentalAtom } from "../../atoms/atom";
+// import { accidentalAtom } from "../../atoms/atom";
 import { MusicalConstants } from "../../constants/musicalConstants";
 
 type KeyProps = {

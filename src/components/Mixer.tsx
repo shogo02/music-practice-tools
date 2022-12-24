@@ -1,14 +1,13 @@
-import { useAtom } from "jotai";
-import { pcKeyToMidiOffsetAtom } from "../atoms/atom";
+// import { pcKeyToMidiOffsetAtom } from "../atoms/atom";
 import BpmSlider from "./BpmSlider"
 
 
 const Mixer = () => {
-    const [pcKeyToMidiOffset, setPcKeyToMidiOffset] = useAtom(pcKeyToMidiOffsetAtom);
+    // const [pcKeyToMidiOffset, setPcKeyToMidiOffset] = useAtom(pcKeyToMidiOffsetAtom);
 
     const pcKeyOffSetChange = (e: string) => {
         console.log(e);
-        setPcKeyToMidiOffset(Number(e));
+        // setPcKeyToMidiOffset(Number(e));
     }
 
     return (
@@ -18,7 +17,7 @@ const Mixer = () => {
             <BpmSlider />
             <div>
                 <input
-                    value={pcKeyToMidiOffset}
+                    // value={pcKeyToMidiOffset}
                     type="number"
                     onChange={(e) => pcKeyOffSetChange(e.target.value)}
                     min="36"
