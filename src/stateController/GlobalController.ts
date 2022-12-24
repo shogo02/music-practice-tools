@@ -85,7 +85,6 @@ export const pcKeyOffSetState = proxy({ pcKeyOffSet: 0 });
 
 let pressingKey: Array<string> = [];
 export const keyDownHanler = (event: KeyboardEvent) => {
-    console.log(event.key)
     if (Constants.PC_KEY.flatMap(e => e).includes(event.key) && !pressingKey.includes(event.key)) {
         const note = pcKeyToNote(event.key);
         if(!note) throw new Error("faild pc key to note.")
