@@ -71,7 +71,7 @@ const displayChordHandler = (chord: Chord) => {
 
 export let playNotesState = proxy<{ playNotes: Array<Note> }>({ playNotes: [] });
 const addPlayNotesState = (note: Note) => {
-    if(playNotesState.playNotes.findIndex(e => e.identifier === note.identifier)){
+    if(playNotesState.playNotes.findIndex(e => e.identifier === note.identifier) === -1){
         playNotesState.playNotes.push(note);
     }
 }
@@ -89,10 +89,7 @@ export const keyDownHanler = (event: KeyboardEvent) => {
         const note = pcKeyToNote(event.key);
         if(!note) throw new Error("faild pc key to note.")
 
-        
-        const tmpNote = convertToFlatNotes([note])[0];
-        keyboardSynth.triggerAttack(tmpNote.identifier);
-        addPlayNotesState(tmpNote);
+        noteOn(note);
 
         pressingKey.push(event.key);
     }
@@ -102,13 +99,23 @@ export const keyUpHanler = (event: KeyboardEvent) => {
         const note = pcKeyToNote(event.key);
         if(!note) throw new Error("faild pc key to note.")
         
-        const tmpNote = convertToFlatNotes([note])[0];
-
-        keyboardSynth.triggerRelease(tmpNote.identifier)
-        removePlayNotesState(tmpNote);
+        noteOff(note);
 
         pressingKey = pressingKey.filter(e => e !== event.key);
     }
+}
+
+const noteOn = (note: Note) => {
+    const tmpNote = convertToFlatNotes([note])[0];
+    keyboardSynth.triggerRelease(tmpNote.identifier)
+    keyboardSynth.triggerAttack(tmpNote.identifier);
+    addPlayNotesState(tmpNote);
+}
+
+const noteOff = (note: Note) => {
+    const tmpNote = convertToFlatNotes([note])[0];
+    keyboardSynth.triggerRelease(tmpNote.identifier)
+    removePlayNotesState(tmpNote);
 }
 
 
@@ -120,15 +127,10 @@ const mitiInit = () => {
     const myInput = WebMidi.getInputByName("Digital Keyboard");
 
     myInput?.addListener("noteon", (e) => {
-        const tmpNote = convertToFlatNotes([e.note])[0];
-        keyboardSynth.triggerAttack(tmpNote.identifier);
-        addPlayNotesState(tmpNote);
+        noteOn(e.note);
     });
     myInput?.addListener("noteoff", (e) => {
-        const tmpNote = convertToFlatNotes([e.note])[0];
-        console.log(tmpNote.identifier);
-        keyboardSynth.triggerRelease(tmpNote.identifier)
-        removePlayNotesState(tmpNote);
+        noteOff(e.note);
     });
 }
 
