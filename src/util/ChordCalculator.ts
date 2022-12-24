@@ -1,6 +1,7 @@
 import { MusicalConstants } from '../constants/musicalConstants'
 import { Chord, ChordSettings } from '../constants/type';
 import { Note } from "../../node_modules/webmidi/dist/esm/webmidi.esm";
+import { Constants } from '../constants/constants';
 
 export class ChordCalculator {
     private readonly CHORD = MusicalConstants.CHORD;
@@ -79,5 +80,14 @@ export class ChordCalculator {
 
     getRandomNumber(max: number) {
         return Math.floor(Math.random() * max);
+    }
+
+    getPcKeyToMidiMap(offSet: number = 0) {
+        return Constants.PCKeyToMidi.map((e, index) => {
+            return {
+                midiNumber: index + offSet,
+                pcKey: e
+            }
+        })
     }
 }
