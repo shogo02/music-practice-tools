@@ -78,7 +78,17 @@ const addPlayNotesState = (note: Note) => {
 const removePlayNotesState = (note: Note) => {
     playNotesState.playNotes = playNotesState.playNotes.filter(e => e.identifier !== note.identifier);
 }
+const initPlayNoteState = ()  => {
+    playNotesState.playNotes = [];
+}
 
+
+export const noteOctobeState = proxy({noteOctobe: InitialValues.NOTE_OCTOBE});
+export const setNoteOctobe = (noteOctobe: number) => {
+    noteOctobeState.noteOctobe = noteOctobe;
+    keyboardSynth.releaseAll();
+    initPlayNoteState();
+}
 
 export const pcKeyOffSetState = proxy({ pcKeyOffSet: 0 });
 
@@ -109,6 +119,7 @@ export const keyUpHanler = (event: KeyboardEvent) => {
 
 const noteOn = (note: Note) => {
     const tmpNote = convertToFlatNotes([note])[0];
+    tmpNote.octave += noteOctobeState.noteOctobe;
     keyboardSynth.triggerRelease(tmpNote.identifier)
     keyboardSynth.triggerAttack(tmpNote.identifier);
     addPlayNotesState(tmpNote);
@@ -116,6 +127,7 @@ const noteOn = (note: Note) => {
 
 const noteOff = (note: Note) => {
     const tmpNote = convertToFlatNotes([note])[0];
+    tmpNote.octave += noteOctobeState.noteOctobe;
     keyboardSynth.triggerRelease(tmpNote.identifier)
     removePlayNotesState(tmpNote);
 }

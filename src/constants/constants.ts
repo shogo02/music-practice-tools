@@ -11,6 +11,7 @@ export class InitialValues {
         { time: "0:2", note: "C5", velocity: 1 },
         { time: "0:3", note: "C5", velocity: 1 }
     ]
+    static readonly NOTE_OCTOBE = 0;
 }
 
 export class Constants {
@@ -22,6 +23,11 @@ export class Constants {
     static readonly BPM = {
         min: 30,
         max: 360,
+    }
+
+    static readonly OCTOBE = {
+        min: -4,
+        max: 4
     }
 
     static readonly PC_KEY = [

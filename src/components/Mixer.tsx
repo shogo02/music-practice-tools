@@ -1,8 +1,12 @@
-import { accidentalHandler } from "../stateController/GlobalController";
+import { accidentalHandler, noteOctobeState, setNoteOctobe } from "../stateController/GlobalController";
 import BpmSlider from "./BpmSlider"
+import { useSnapshot } from 'valtio'
+import { Constants } from "../constants/constants";
 
 
 const Mixer = () => {
+    const noteOctobe = useSnapshot(noteOctobeState).noteOctobe;
+    
     // TODO とりあえず、プルダウン実装。あとで変える
     const pullDown = ["natural", "sharp", "flat"];
     
@@ -14,11 +18,11 @@ const Mixer = () => {
             <BpmSlider />
             <div>
                 <input
-                    // value={pcKeyToMidiOffset}
+                    value={noteOctobe}
                     type="number"
-                    // onChange={(e) => pcKeyOffSetChange(e.target.value)}
-                    min="36"
-                    max="48"
+                    onChange={(e) => setNoteOctobe(Number(e.target.value))}
+                    min={Constants.OCTOBE.min}
+                    max={Constants.OCTOBE.max}
                     className='w-1/2'
                 />
             </div>
