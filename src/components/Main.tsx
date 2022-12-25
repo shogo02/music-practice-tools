@@ -21,7 +21,7 @@ const Main = () => {
                     displayChord.notesInChordName.map((value, index) => {
                         const className = displayChord.correctNotesInChord[index] ? 'text-red-300' : ''
                         return (
-                            <span key={value} className={className}>{value} </span>
+                            <span key={value} className={className}>{parse(convertMusicalSymbols(value))} </span>
                         )
                     })
                 }

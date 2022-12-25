@@ -5,7 +5,7 @@ import { Constants } from "../constants/constants";
 
 const chordSettingConfig = Constants.CHORD_SETTINGS_INIT;
 const Pad = () => {
-    const isPlayMetronome = useSnapshot(isPlayState).isPlatMetronome;
+    const isPlayMetronome = useSnapshot(isPlayState).isPlayMetronome;
     const enableChord = useSnapshot(chordSettingsState).enableChord;
 
     return (

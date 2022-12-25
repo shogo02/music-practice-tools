@@ -33,9 +33,9 @@ export const beatPositionState = proxy({ value: 0 });
 
 
 
-export const isPlayState = proxy({ isPlatMetronome: false })
+export const isPlayState = proxy({ isPlayMetronome: false })
 export const toggleTransport = () => {
-    isPlayState.isPlatMetronome = !isPlayState.isPlatMetronome;
+    isPlayState.isPlayMetronome = !isPlayState.isPlayMetronome;
 }
 subscribe(isPlayState, () => {
     beatPositionState.value = 0;
@@ -71,12 +71,20 @@ const displayChordHandler = (chord: Chord) => {
 }
 
 export let playNotesState = proxy<{ playNotes: Array<Note> }>({ playNotes: [] });
-const addPlayNotesState = (note: Note) => {
+const addPlayNotesState = async (note: Note) => {
     if (playNotesState.playNotes.findIndex(e => e.identifier === note.identifier) === -1) {
         playNotesState.playNotes.push(note);
 
         const correctNoteIndex = displayChordState.notesInChordName.indexOf(note.name + (note.accidental ?? ""));
-        displayChordState.correctNotesInChord[correctNoteIndex] = note.name + (note.accidental ?? "");
+        if(correctNoteIndex >= 0){
+            displayChordState.correctNotesInChord[correctNoteIndex] = note.name + (note.accidental ?? "");
+        }
+
+        if(!isPlayState.isPlayMetronome && JSON.stringify(displayChordState.correctNotesInChord) === JSON.stringify(displayChordState.notesInChordName)) {
+            await new Promise(s => setTimeout(s, 200))
+            const chord = createRandomChord();
+            displayChordHandler(chord);
+        }
     }
 }
 const removePlayNotesState = (note: Note) => {
