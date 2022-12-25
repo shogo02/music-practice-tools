@@ -22,7 +22,7 @@ function Key(props: KeyProps) {
     }
 
     return (
-        <div className="flex" onKeyDown={() => console.log("key")}>
+        <div className="flex">
             <div className={addClassName + " border border-black flex justify-center items-end rounded-b-lg"}>
                 <div className="p-2">
                     {displayNoteName}

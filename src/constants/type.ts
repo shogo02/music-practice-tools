@@ -35,6 +35,10 @@ export type Chord = {
     notesInChordDegree: Array<number>;
 }
 
+export type CorrectChord = Chord & {
+    correctNotesInChord: Array<string>;
+}
+
 export type PcKeyToMidiMap = {
     midiNumber: number,
     pcKey: string

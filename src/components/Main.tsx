@@ -16,7 +16,16 @@ const Main = () => {
         <div className='border border-black h-full bg-[#000730] text-cyan-200 p-7'>
             <div className='text-4xl'>{beatPosition}</div>
             <div className='text-6xl text-center'>{parse(convertMusicalSymbols(displayChord.chordName))}</div>
-            <div className='text-4xl text-center'>{parse(convertMusicalSymbols(displayChord.notesInChordName.join(" ")))}</div>
+            <div className='text-4xl text-center'>
+                {
+                    displayChord.notesInChordName.map((value, index) => {
+                        const className = displayChord.correctNotesInChord[index] ? 'text-red-300' : ''
+                        return (
+                            <span key={value} className={className}>{value} </span>
+                        )
+                    })
+                }
+            </div>
             <div className='text-3xl text-center'>{displayChord.notesInChordDegree.join(" ")}</div>
             <div className='text-3xl text-center'>{parse(convertMusicalSymbols(displayPlayNotes.join(" ")))}</div>
 
