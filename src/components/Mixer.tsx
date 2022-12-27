@@ -1,12 +1,11 @@
-import { accidentalHandler, midiDevicesState, noteOctobeState, selectedMidiDeviceHandler, setNoteOctobe } from "../stateController/GlobalController";
 import BpmSlider from "./BpmSlider"
 import { useSnapshot } from 'valtio'
 import { Constants } from "../constants/constants";
 
 
 const Mixer = () => {
-    const noteOctobe = useSnapshot(noteOctobeState).noteOctobe;
-    const midiDevices = useSnapshot(midiDevicesState).devices;
+    // const noteOctobe = useSnapshot(noteOctobeState).noteOctobe;
+    // const midiDevices = useSnapshot(midiDevicesState).devices;
 
     // TODO とりあえず、プルダウン実装。あとで変える
     const pullDown = ["natural", "sharp", "flat"];
@@ -17,7 +16,7 @@ const Mixer = () => {
             Mixer
             <div className="h-5"></div>
             <BpmSlider />
-            <div>
+            {/* <div>
                 <input
                     value={noteOctobe}
                     type="number"
@@ -32,7 +31,7 @@ const Mixer = () => {
             </select>
             <select onChange={(e) => selectedMidiDeviceHandler(e.target.value)}>
                 { midiDevices.map((e) => <option key={e} value={e}>{e}</option>) }
-            </select>
+            </select> */}
         </div>
     )
 }

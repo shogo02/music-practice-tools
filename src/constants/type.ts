@@ -43,3 +43,5 @@ export type PcKeyToMidiMap = {
     midiNumber: number,
     pcKey: string
 }
+
+export type GamePlayMode = "tempo" | "nextByMyself" | "correctToNext";
