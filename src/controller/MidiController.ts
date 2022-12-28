@@ -1,6 +1,6 @@
 import { WebMidi, Note, Input } from "../../node_modules/webmidi/dist/esm/webmidi.esm";
 
-export class MidiDeviceController {
+export class MidiController {
     private devices: Array<Input> = [];
     private selectedDevice: Input | undefined;
 
@@ -8,11 +8,9 @@ export class MidiDeviceController {
 
     async initialize() {
         await WebMidi.enable()
-            .then(() => {
-                this.devices = WebMidi.inputs;
-            })
+            .then((value) => this.devices = value.inputs )
             .catch(err => alert(err));
-        return this.devices
+        return this.devices;
     }   
 
     selectDevice(deviceName: string, noteOnListner: ()=>void, noteOffListner: ()=>void) {

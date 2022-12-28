@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { gameControllerState } from "../stateController/GameController";
+import { globalController } from "../controller/GlobalController";
 import { useSnapshot } from 'valtio'
 
 
 function PcKeyController() {
-    const {keyDownHandler, keyUpHandler} = useSnapshot(gameControllerState);
+    const {keyDownHandler, keyUpHandler} = useSnapshot(globalController);
 
     useEffect(() => {
         document.addEventListener("keydown", keyDownHandler, false);
