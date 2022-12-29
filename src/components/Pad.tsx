@@ -1,21 +1,23 @@
 import PadButton from "./parts/PadButton";
 import { useSnapshot } from 'valtio'
 import { Constants } from "../constants/constants";
-import { globalController } from "../controller/GlobalController";
+import { globalControllerState } from "../controller/GlobalController";
+import { gameControllerState } from "../controller/GameController";
 
 const chordSettingConfig = Constants.CHORD_SETTINGS_INIT;
 const Pad = () => {
-    const gc = useSnapshot(globalController);
-    console.log(gc)
+    const globalController = useSnapshot(globalControllerState);
+    const gameController = useSnapshot(gameControllerState)
+
     // const isPlay = gc.isPlay;
     // const metronomeToggle = gc.metronomeToggle;
 
     return (
         <div className="mt-5 mx-6">
             <div className="grid grid-cols-3 gap-5">
-                {/* <div className="col-span-3">
-                    <PadButton id='play' text={isPlay ? "■" : "▶"} onChange={metronomeToggle} checked={isPlay} />
-                </div> */}
+                <div className="col-span-3">
+                    <PadButton id='play' text={gameController.isPlay ? "■" : "▶"} onChange={globalController.metronomeToggle} checked={gameController.isPlay} />
+                </div>
                 {/* {
                     chordSettingConfig.map(e => {
                         const checked = false;

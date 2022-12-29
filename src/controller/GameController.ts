@@ -5,7 +5,7 @@ import * as Tone from 'tone';
 import { proxy } from 'valtio'
 
 
-export class GameController {
+class GameController {
     chordSettings = Constants.CHORD_SETTINGS_INIT;
     selectedChord: ChordKeyName = "major";
     isPlay = false;
@@ -25,4 +25,4 @@ export class GameController {
     }
 }
 
-// export const gameControllerState: GameController = proxy(new GameController())
+export const gameControllerState: GameController = proxy(new GameController())

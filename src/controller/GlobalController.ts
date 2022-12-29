@@ -1,47 +1,42 @@
-import { GamePlayMode } from "../constants/type";
 import { proxy } from 'valtio'
 import { WebMidi, Note, Input } from "webmidi/dist/esm/webmidi.esm";
-import { MidiController } from "./MidiController";
 import * as Tone from 'tone';
-import { GameController } from "./GameController";
-import { NoteController } from "./NoteController";
+import { midiControllerState } from './MidiController';
+import { noteControllerState } from './NoteController';
+import { gameControllerState } from './GameController';
 // import { gameControllerState } from "./GameController";
 
 // const gc = gameControllerState;
 
+const mc = midiControllerState;
+const nc = noteControllerState;
+const gc = gameControllerState;
 class GlobalController {
-    nc = new NoteController();
-    gc = new GameController();
-    mc = new MidiController();
-
-    isPlay = false;
-    
     constructor(
     ) {
         this.midiInit();
         this.gameInit();
     }
-    
+
     async midiInit() {
-        const devices = await this.mc.initialize();
-        if(devices.length) {
-            this.mc.selectDevice(devices[0].name, this.nc.noteOn, this.nc.noteOff);
+        const devices = await mc.initialize();
+        if (devices.length) {
+            mc.selectDevice(devices[0].name, nc.noteOn, nc.noteOff);
         }
     }
-    
+
     gameInit() {
-        
+
     }
-    
+
     metronomeToggle() {
-        this.isPlay = !this.isPlay;
-        // this.nc.toggleTransport();
-        // this.gc.metronomeToggle();
+        // nc.toggleTransport();
+        gc.metronomeToggle();
     }
 
     private draw() {
-        const position = this.nc.getCurrentBeat();
-        this.gc.currentBeat = position;
+        const position = nc.getCurrentBeat();
+        gc.currentBeat = position;
     }
 
 
@@ -69,4 +64,4 @@ class GlobalController {
     }
 }
 
-export const globalController: GlobalController = proxy(new GlobalController())
+export const globalControllerState: GlobalController = proxy(new GlobalController())

@@ -1,7 +1,7 @@
 import parse from 'html-react-parser';
 import { convertMusicalSymbols } from '../util/converter';
 import { useSnapshot } from 'valtio'
-import { globalController } from '../controller/GlobalController';
+import { globalControllerState } from '../controller/GlobalController';
 
 
 const Main = () => {
