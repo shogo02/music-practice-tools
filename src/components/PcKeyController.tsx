@@ -7,14 +7,14 @@ function PcKeyController() {
     return () => {
       document.removeEventListener('keydown', keyDownHanler, false)
     }
-  }, [keyDownHanler])
+  }, [])
 
   useEffect(() => {
     document.addEventListener('keyup', keyUpHanler, false)
     return () => {
       document.removeEventListener('keyup', keyUpHanler, false)
     }
-  }, [keyUpHanler])
+  }, [])
 
   return <div />
 }

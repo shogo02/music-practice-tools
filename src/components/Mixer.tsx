@@ -2,7 +2,7 @@ import { useSnapshot } from 'valtio'
 import BpmSlider from './BpmSlider'
 import { Constants } from '../constants/constants'
 import { GameContoller } from '../controller/GameController'
-import { Accidental } from '../constants/type'
+import { Accidental, ChordType } from '../constants/type'
 import { MidiController, midiDeviceState } from '../controller/MidiController'
 import { gameState } from '../controller/GameState'
 
@@ -12,6 +12,7 @@ function Mixer() {
 
   // TODO とりあえず、プルダウン実装。あとで変える
   const pullDown: Array<Accidental> = ['natural', 'sharp', 'flat']
+  const chordTypes: Array<ChordType> = ['random', 'diatonic3Note', 'diatonic4Note']
 
   return (
     <div className="p-3 flex flex-col justify-center">
@@ -37,6 +38,13 @@ function Mixer() {
       </select>
       <select onChange={(e) => MidiController.selectDevice(e.target.value)}>
         {devices.map((e) => (
+          <option key={e} value={e}>
+            {e}
+          </option>
+        ))}
+      </select>
+      <select onChange={(e) => GameContoller.selectChordType(e.target.value as ChordType)}>
+        {chordTypes.map((e) => (
           <option key={e} value={e}>
             {e}
           </option>

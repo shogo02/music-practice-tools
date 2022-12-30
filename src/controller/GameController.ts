@@ -2,7 +2,7 @@ import { WebMidi, Note, Input } from 'webmidi'
 import * as Tone from 'tone'
 import { proxy, subscribe } from 'valtio'
 import { type } from 'os'
-import { Accidental, Chord, ChordKeyName, ChordSettingElement, ChordSettings } from '../constants/type'
+import { Accidental, Chord, ChordKeyName, ChordSettingElement, ChordSettings, ChordType, DiatonicRoot } from '../constants/type'
 import { Constants } from '../constants/constants'
 import { NoteController } from './NoteController'
 import ChordCalculator from '../util/ChordCalculator'
@@ -24,11 +24,18 @@ export class GameContoller {
   }
 
   static createNextChord() {
-    const chord = ChordCalculator.createRandomChord(
-      gameState.selectedChord,
-      gameState.selectedAccidental,
-      gameState.beforeRootNote
-    )
+    let chord = gameState.currentChord
+
+    if (gameState.chordType === 'random') {
+      chord = ChordCalculator.createRandomChord(gameState.selectedChord, gameState.selectedAccidental, gameState.beforeRootNote)
+    } else if (gameState.chordType === 'diatonic3Note' || gameState.chordType === 'diatonic4Note') {
+      chord = ChordCalculator.createRnadomDiatonicChord(
+        gameState.chordType,
+        gameState.selectedDiatonicRoot,
+        gameState.beforeRootNote
+      )
+    }
+
     gameState.currentChord = chord
     gameState.beforeRootNote = chord?.notesInChord[0]
 
@@ -58,14 +65,22 @@ export class GameContoller {
     }
   }
 
-  static setKeyBoardOctobe = (octobe: number) => {
+  static setKeyBoardOctobe(octobe: number) {
     NoteController.clearKeyboradReleaseALl()
     gameState.keyBoardOctobe = octobe
     gameState.playingNotes = []
   }
 
-  static setSelectedAccidental = (accidental: Accidental) => {
+  static setSelectedAccidental(accidental: Accidental) {
     gameState.selectedAccidental = accidental
+  }
+
+  static selectChordType(chordType: ChordType) {
+    gameState.chordType = chordType
+  }
+
+  static selectDiatonicChordRoot(root: DiatonicRoot) {
+    gameState.selectedDiatonicRoot = root
   }
 
   static subscribeCorrectNote() {

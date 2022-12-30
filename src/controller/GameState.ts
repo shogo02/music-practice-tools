@@ -1,7 +1,7 @@
 import { WebMidi, Note, Input } from 'webmidi'
 import * as Tone from 'tone'
 import { proxy } from 'valtio'
-import { Accidental, Chord, ChordKeyName, ChordSettingElement, ChordSettings } from '../constants/type'
+import { Accidental, Chord, ChordKeyName, ChordSettingElement, ChordSettings, ChordType, DiatonicRoot } from '../constants/type'
 
 type GameState = {
   selectedChord: Array<ChordSettingElement>
@@ -13,6 +13,8 @@ type GameState = {
   selectedAccidental: Accidental
   playingNotes: Array<Note>
   keyBoardOctobe: number
+  chordType: ChordType
+  selectedDiatonicRoot: DiatonicRoot
 }
 
 export const gameState: GameState = proxy({
@@ -25,4 +27,6 @@ export const gameState: GameState = proxy({
   selectedAccidental: 'natural',
   playingNotes: [],
   keyBoardOctobe: 0,
+  chordType: 'random',
+  selectedDiatonicRoot: 'C',
 })

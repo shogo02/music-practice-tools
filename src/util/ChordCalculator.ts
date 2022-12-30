@@ -1,8 +1,16 @@
 import { Note } from 'webmidi'
-import { Chord, ChordSettingElement } from '../constants/type'
+import {
+  Chord,
+  ChordKeyName,
+  ChordSettingElement,
+  ChordType,
+  DiatonicRoot,
+  NotesInChordConfig,
+  NotesInChordElement,
+} from '../constants/type'
 import { Constants } from '../constants/constants'
 
-const { NATURAL_ROOT, NOTES_IN_CHORD_CONFIG, CHORD_SETTINGS_INIT } = Constants
+const { NATURAL_ROOT, NOTES_IN_CHORD_CONFIG, CHORD_SETTINGS_INIT, DIATONIC_3NOTE, DIATONIC_4NOTE, SCALE_NOTES } = Constants
 
 export default class ChordCalculator {
   static getRandomRoot(selectedAccidental: string, beforeRootNote?: Note) {
@@ -38,7 +46,7 @@ export default class ChordCalculator {
     const randomChord = selectedChord[ChordCalculator.getRandomNumber(selectedChord.length)]
     const chordConfig = NOTES_IN_CHORD_CONFIG.find((e) => e.key === randomChord.key)
     if (!chordConfig) throw new Error(`not found chord config.`)
-    const notes = ChordCalculator.createNotesInChord(tmpRootNote, chordConfig?.notesInChord)
+    const notes = ChordCalculator.createRootFromNotes(tmpRootNote, chordConfig?.notesInChord)
     const rootNoteName = tmpRootNote.name + (tmpRootNote.accidental ?? '')
 
     return {
@@ -63,12 +71,57 @@ export default class ChordCalculator {
     })
   }
 
-  static createNotesInChord = (rootNote: Note, chordConfig: Array<number>) => {
+  static createRootFromNotes = (rootNote: Note, intervalList: Array<number>, rootOffSet: number = 0) => {
     const result: Array<Note> = []
-    chordConfig.forEach((e) => {
-      result.push(new Note(rootNote.getOffsetNumber(0, e - 1)))
+    intervalList.forEach((e) => {
+      result.push(new Note(rootNote.getOffsetNumber(0, e - 1 + rootOffSet)))
     })
     return result
+  }
+
+  // ダイアトニックコード用
+  static createRnadomDiatonicChord(chordType: ChordType, selectedDiatonicRoot: DiatonicRoot, beforeRootNote?: Note) {
+    const notesInScale = SCALE_NOTES.find((e) => e.key === 'majorScale')?.notesInScale
+    if (!notesInScale) throw new Error(`not found scale note`)
+    const baseRootNote = new Note(`${selectedDiatonicRoot}1`)
+
+    let rootNote = baseRootNote
+    let randomNumber = 0
+    const shuffle = () => {
+      randomNumber = ChordCalculator.getRandomNumber(notesInScale.length)
+      const interval = notesInScale[randomNumber]
+      rootNote = new Note(baseRootNote.getOffsetNumber(0, interval - 1))
+      return rootNote
+    }
+
+    let result = shuffle()
+    while (beforeRootNote?.identifier === result.identifier) {
+      result = shuffle()
+    }
+
+    let rootNoteKey: ChordKeyName
+    if (chordType === 'diatonic3Note') {
+      rootNoteKey = DIATONIC_3NOTE[randomNumber]
+    } else if (chordType === 'diatonic4Note') {
+      rootNoteKey = DIATONIC_4NOTE[randomNumber]
+    } else {
+      throw new Error('undifined chord type')
+    }
+
+    const chordConfig = NOTES_IN_CHORD_CONFIG.find((e) => e.key === rootNoteKey)
+    if (!chordConfig) throw new Error(`not found chord config.`)
+
+    const chord = ChordCalculator.createRootFromNotes(result, chordConfig.notesInChord)
+
+    const rootNoteName = chord[0].name + (chord[0].accidental ?? '')
+    const chordAttachName = CHORD_SETTINGS_INIT.find((e) => e.key === rootNoteKey)?.chordAttachName
+    if (chordAttachName === undefined) throw new Error(`not found chord attach name.`)
+
+    return {
+      chordName: rootNoteName + chordAttachName,
+      notesInChord: chord,
+      notesInChordDegree: chordConfig.notesInChord,
+    }
   }
 
   static pcKeyToNote = (key: string) => {

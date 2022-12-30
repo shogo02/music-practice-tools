@@ -61,3 +61,7 @@ export type PcKeyToMidiMap = {
 export type GamePlayMode = 'tempo' | 'nextByMyself' | 'correctToNext'
 
 export type Accidental = 'natural' | 'sharp' | 'flat'
+
+export type ChordType = 'random' | 'diatonic3Note' | 'diatonic4Note'
+
+export type DiatonicRoot = 'C' | 'G' | 'D' | 'A' | 'E' | 'B' | 'F#' | 'Db' | 'Ab' | 'Eb' | 'Bb' | 'F'
