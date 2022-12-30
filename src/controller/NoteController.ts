@@ -1,7 +1,6 @@
-import { WebMidi, Note, Input } from 'webmidi/dist/esm/webmidi.esm'
+import { WebMidi, Note, Input, NoteMessageEvent } from 'webmidi'
 import * as Tone from 'tone'
 import { proxy } from 'valtio'
-import { NoteMessageEvent } from 'webmidi'
 import { Constants } from '../constants/constants'
 import ChordCalculator from '../util/ChordCalculator'
 import { gameState } from './GameState'
@@ -21,16 +20,16 @@ export class NoteController {
     }).toDestination()
   }
 
-  static noteOn(event: NoteMessageEvent) {
-    const tmpNote = event.note
+  static noteOn(note: Note) {
+    const tmpNote = note
     tmpNote.octave += gameState.keyBoardOctobe
     NoteController.keyboardSynth.triggerRelease(tmpNote.identifier)
     NoteController.keyboardSynth.triggerAttack(tmpNote.identifier)
     gameState.playingNotes.push(tmpNote)
   }
 
-  static noteOff(event: NoteMessageEvent) {
-    const tmpNote = event.note
+  static noteOff(note: Note) {
+    const tmpNote = note
     tmpNote.octave += gameState.keyBoardOctobe
     NoteController.keyboardSynth.triggerRelease(tmpNote.identifier)
     gameState.playingNotes = gameState.playingNotes.filter((e) => e.identifier !== tmpNote.identifier)

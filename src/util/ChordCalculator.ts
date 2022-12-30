@@ -71,20 +71,20 @@ export default class ChordCalculator {
     return result
   }
 
-  // static pcKeyToNote = (key: string) => {
-  //   const pcKey = Constants.PC_KEY
-  //   const pcKeyOffSet = pcKeyOffSetState.pcKeyOffSet + 37
+  static pcKeyToNote = (key: string) => {
+    const pcKey = Constants.PC_KEY
 
-  //   let index = pcKey[0].findIndex((value) => value == key)
-  //   if (index >= 0) {
-  //     const tmpNote = new Note(index)
-  //     return new Note(tmpNote.getOffsetNumber(4))
-  //   }
+    let index = pcKey[0].findIndex((value) => value === key)
+    if (index >= 0) {
+      const tmpNote = new Note(index)
+      return new Note(tmpNote.getOffsetNumber(4))
+    }
 
-  //   index = pcKey[1].findIndex((value) => value === key)
-  //   if (index >= 0) {
-  //     const tmpNote = new Note(index)
-  //     return new Note(tmpNote.getOffsetNumber(5))
-  //   }
-  // }
+    index = pcKey[1].findIndex((value) => value === key)
+    if (index >= 0) {
+      const tmpNote = new Note(index)
+      return new Note(tmpNote.getOffsetNumber(5))
+    }
+    return undefined
+  }
 }

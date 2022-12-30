@@ -28,7 +28,7 @@ export class MidiController {
     WebMidi.getInputByName(midiDeviceState.selectedDevice ?? '')?.removeListener()
     const midiDevice = WebMidi.getInputByName(deviceName)
     midiDeviceState.selectedDevice = midiDevice?.name
-    midiDevice?.addListener('noteon', NoteController.noteOn)
-    midiDevice?.addListener('noteoff', NoteController.noteOff)
+    midiDevice?.addListener('noteon', (e) => NoteController.noteOn(e.note))
+    midiDevice?.addListener('noteoff', (e) => NoteController.noteOff(e.note))
   }
 }

@@ -1,23 +1,20 @@
-// import { useEffect } from "react";
-// import { globalControllerState } from "../controller/GlobalController";
-// import { useSnapshot } from 'valtio'
+import { useEffect } from 'react'
+import { keyDownHanler, keyUpHanler } from '../controller/PcKeyController'
 
 function PcKeyController() {
-  // const { keyDownHandler, keyUpHandler } = useSnapshot(globalControllerState);
+  useEffect(() => {
+    document.addEventListener('keydown', keyDownHanler, false)
+    return () => {
+      document.removeEventListener('keydown', keyDownHanler, false)
+    }
+  }, [keyDownHanler])
 
-  // useEffect(() => {
-  //     document.addEventListener("keydown", keyDownHandler, false);
-  //     return () => {
-  //         document.removeEventListener("keydown", keyDownHandler, false);
-  //     }
-  // }, [keyDownHandler]);
-
-  // useEffect(() => {
-  //     document.addEventListener("keyup", keyUpHandler, false);
-  //     return () => {
-  //         document.removeEventListener("keyup", keyUpHandler, false);
-  //     }
-  // }, [keyUpHandler]);
+  useEffect(() => {
+    document.addEventListener('keyup', keyUpHanler, false)
+    return () => {
+      document.removeEventListener('keyup', keyUpHanler, false)
+    }
+  }, [keyUpHanler])
 
   return <div />
 }
