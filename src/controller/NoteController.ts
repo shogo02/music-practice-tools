@@ -22,14 +22,18 @@ export class NoteController {
   }
 
   static noteOn(event: NoteMessageEvent) {
-    NoteController.keyboardSynth.triggerRelease(event.note.identifier)
-    NoteController.keyboardSynth.triggerAttack(event.note.identifier)
-    gameState.playingNotes.push(event.note)
+    const tmpNote = event.note
+    tmpNote.octave += gameState.keyBoardOctobe
+    NoteController.keyboardSynth.triggerRelease(tmpNote.identifier)
+    NoteController.keyboardSynth.triggerAttack(tmpNote.identifier)
+    gameState.playingNotes.push(tmpNote)
   }
 
   static noteOff(event: NoteMessageEvent) {
-    NoteController.keyboardSynth.triggerRelease(event.note.identifier)
-    gameState.playingNotes = gameState.playingNotes.filter((e) => e.identifier !== event.note.identifier)
+    const tmpNote = event.note
+    tmpNote.octave += gameState.keyBoardOctobe
+    NoteController.keyboardSynth.triggerRelease(tmpNote.identifier)
+    gameState.playingNotes = gameState.playingNotes.filter((e) => e.identifier !== tmpNote.identifier)
   }
 
   static toggleTransport() {
