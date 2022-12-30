@@ -19,9 +19,7 @@ function PcKeyController() {
   //     }
   // }, [keyUpHandler]);
 
-  return (
-    <div />
-  );
+  return <div />
 }
 
-export default PcKeyController;
+export default PcKeyController

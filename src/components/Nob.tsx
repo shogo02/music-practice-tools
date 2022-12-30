@@ -10,7 +10,7 @@ function Nob() {
       Nob
       {/* <ToggleButton onClick={onClickFlatOrSharpNotation} trueText={'#'} falseText={'b'} isTrue={accidental === 'sharp'} /> */}
     </div>
-  );
+  )
 }
 
-export default Nob;
+export default Nob

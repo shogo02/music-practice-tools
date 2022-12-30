@@ -1,13 +1,13 @@
-import { useSnapshot } from 'valtio';
-import BpmSlider from './BpmSlider';
-import { Constants } from '../constants/constants';
+import { useSnapshot } from 'valtio'
+import BpmSlider from './BpmSlider'
+import { Constants } from '../constants/constants'
 
 function Mixer() {
   // const noteOctobe = useSnapshot(noteOctobeState).noteOctobe;
   // const midiDevices = useSnapshot(midiDevicesState).devices;
 
   // TODO とりあえず、プルダウン実装。あとで変える
-  const pullDown = ['natural', 'sharp', 'flat'];
+  const pullDown = ['natural', 'sharp', 'flat']
 
   return (
     <div className="p-3 flex flex-col justify-center">
@@ -31,7 +31,7 @@ function Mixer() {
                 { midiDevices.map((e) => <option key={e} value={e}>{e}</option>) }
             </select> */}
     </div>
-  );
+  )
 }
 
-export default Mixer;
+export default Mixer

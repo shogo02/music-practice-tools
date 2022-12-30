@@ -1,35 +1,35 @@
-import { ChordSettings, NotesInChordConfig } from './type';
+import { ChordSettings, NotesInChordConfig } from './type'
 
 export class Constants {
-  static readonly PC_EY_OFFSET = 36;
+  static readonly PC_EY_OFFSET = 36
 
-  static readonly KEYBOARD_OFFSET = 36;
+  static readonly KEYBOARD_OFFSET = 36
 
-  static readonly NOTE_OCTOBE = 0;
+  static readonly NOTE_OCTOBE = 0
 
   static readonly METRONOME_PATTERN = [
     { time: 0, note: 'C6', velocity: 1 },
     { time: '0:1', note: 'C5', velocity: 1 },
     { time: '0:2', note: 'C5', velocity: 1 },
     { time: '0:3', note: 'C5', velocity: 1 },
-  ];
+  ]
 
   static readonly MASTER_VOLUME = {
     init: -10,
     min: -60,
     max: 0,
-  };
+  }
 
   static readonly BPM = {
     init: 120,
     min: 30,
     max: 360,
-  };
+  }
 
   static readonly OCTOBE = {
     min: -4,
     max: 4,
-  };
+  }
 
   static readonly PC_KEY = [
     ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', ',', 'l', '.', ';', '/', '_', ']'],
@@ -37,7 +37,7 @@ export class Constants {
 
     // "a", "z", "s", "x", "d", "c", "f", "v", "g", "b", "h", "n", "j", "m", "k", ",", "l", ".", ";", "/", ":", "_", "]",
     // "1", "q", "2", "w", "3", "e", "4", "r", "5", "t", "6", "y", "7", "u", "8", "i", "9", "o", "0", "p", "-", "@", "^",
-  ];
+  ]
 
   static readonly CHORD_SETTINGS_INIT: ChordSettings = [
     { key: 'power', buttonDisplayName: '5', chordAttachName: '5' },
@@ -58,7 +58,7 @@ export class Constants {
     { key: '7shp5', buttonDisplayName: '7(#5)', chordAttachName: '7(#5)' },
     { key: 'm7b5', buttonDisplayName: 'm7(b5)', chordAttachName: 'm7(b5)' },
     { key: 'm7shp5', buttonDisplayName: 'm7(#5)', chordAttachName: 'm7(#5)' },
-  ];
+  ]
 
   static readonly NOTES_IN_CHORD_CONFIG: NotesInChordConfig = [
     { key: 'power', notesInChord: [1, 8] },
@@ -79,13 +79,12 @@ export class Constants {
     { key: '7shp5', notesInChord: [1, 5, 9, 11] },
     { key: 'm7b5', notesInChord: [1, 4, 7, 11] },
     { key: 'm7shp5', notesInChord: [1, 4, 9, 11] },
-  ];
+  ]
 
   static readonly MIDI_HALF_NOTE_NUMBER = [
-    1, 3, 6, 8, 10, 13, 15, 18, 20, 22, 25, 27, 30, 32, 34, 37, 39, 42, 44, 46, 49,
-    51, 54, 56, 58, 61, 63, 66, 68, 70, 73, 75, 78, 80, 82, 85, 87, 90, 92, 94, 97,
-    99, 102, 104, 106, 109, 111, 114, 116, 118, 121, 123, 126,
-  ];
+    1, 3, 6, 8, 10, 13, 15, 18, 20, 22, 25, 27, 30, 32, 34, 37, 39, 42, 44, 46, 49, 51, 54, 56, 58, 61, 63, 66, 68, 70, 73, 75,
+    78, 80, 82, 85, 87, 90, 92, 94, 97, 99, 102, 104, 106, 109, 111, 114, 116, 118, 121, 123, 126,
+  ]
 
-  static readonly NATURAL_ROOT = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+  static readonly NATURAL_ROOT = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 }

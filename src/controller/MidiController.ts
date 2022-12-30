@@ -1,26 +1,33 @@
-import { proxy } from 'valtio';
-import { WebMidi, Input } from "webmidi";
+import { proxy } from 'valtio'
+import { WebMidi, Input } from 'webmidi'
+import { NoteController } from './NoteController'
 
-class MidiController {
-  private devices: Array<Input> = [];
-
-  private selectedDevice: Input | undefined;
-
-  constructor() { }
-
-  async initialize() {
-    await WebMidi.enable()
-      .then((value) => { this.devices = value.inputs })
-      .catch((err) => alert(err));
-    return this.devices;
-  }
-
-  selectDevice(deviceName: string, noteOnListner: () => void, noteOffListner: () => void) {
-    this.selectedDevice?.removeListener();
-    this.selectedDevice = WebMidi.getInputByName(deviceName);
-    this.selectedDevice?.addListener('noteon', noteOnListner);
-    this.selectedDevice?.addListener('noteoff', noteOffListner);
-  }
+type MidiDeviceState = {
+  devices: Array<Input>
+  selectedDevice: Input | undefined
 }
 
-export const midiControllerState: MidiController = proxy(new MidiController());
+export const midiDeviceState: MidiDeviceState = proxy({
+  devices: [],
+  selectedDevice: undefined,
+})
+
+export class MidiController {
+  static async initialize() {
+    await WebMidi.enable()
+      .then((value) => {
+        midiDeviceState.devices = value.inputs
+        if (midiDeviceState.devices.length) {
+          MidiController.selectDevice(midiDeviceState.devices[0].name, NoteController.noteOn, NoteController.noteOff)
+        }
+      })
+      .catch((err) => {})
+  }
+
+  static selectDevice(deviceName: string, noteOnListner: () => void, noteOffListner: () => void) {
+    midiDeviceState.selectedDevice?.removeListener()
+    midiDeviceState.selectedDevice = WebMidi.getInputByName(deviceName)
+    midiDeviceState.selectedDevice?.addListener('noteon', noteOnListner)
+    midiDeviceState.selectedDevice?.addListener('noteoff', noteOffListner)
+  }
+}

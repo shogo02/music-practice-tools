@@ -1,9 +1,9 @@
-import Main from './components/Main';
-import Mixer from './components/Mixer';
-import Nob from './components/Nob';
-import Pad from './components/Pad';
-import KeyBoard from './components/keyboard/KeyBoard';
-import PcKeyController from './components/PcKeyController';
+import Main from './components/Main'
+import Mixer from './components/Mixer'
+import Nob from './components/Nob'
+import Pad from './components/Pad'
+import KeyBoard from './components/keyboard/KeyBoard'
+import PcKeyController from './components/PcKeyController'
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
       </div>
       <PcKeyController />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

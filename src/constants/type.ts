@@ -1,42 +1,61 @@
+import { Note } from 'webmidi'
+
 export type ChordKeyName =
-    'power' | 'major' | 'minor' | 'dim' | 'aug' | 'sus2' | 'sus4' | '6' | 'm6'
-    | '7' | 'M7' | 'm7' | 'mM7' | 'aug7' | 'dim7' | '7b5' | '7shp5' | 'm7b5' | 'm7shp5';
+  | 'power'
+  | 'major'
+  | 'minor'
+  | 'dim'
+  | 'aug'
+  | 'sus2'
+  | 'sus4'
+  | '6'
+  | 'm6'
+  | '7'
+  | 'M7'
+  | 'm7'
+  | 'mM7'
+  | 'aug7'
+  | 'dim7'
+  | '7b5'
+  | '7shp5'
+  | 'm7b5'
+  | 'm7shp5'
 
 export type ChordSettingElement = {
-  key: ChordKeyName,
-  chordAttachName: string,
-  buttonDisplayName: string,
-};
-export type ChordSettings = Array<ChordSettingElement>;
+  key: ChordKeyName
+  chordAttachName: string
+  buttonDisplayName: string
+}
+export type ChordSettings = Array<ChordSettingElement>
 
 export type NotesInChordElement = {
-  key: ChordKeyName,
+  key: ChordKeyName
   notesInChord: Array<number>
-};
-export type NotesInChordConfig = Array<NotesInChordElement>;
+}
+export type NotesInChordConfig = Array<NotesInChordElement>
 
 export type NoteConfig = {
-  noteId: number;
-  noteName: string;
-};
+  noteId: number
+  noteName: string
+}
 export type RootNoteConfig = NoteConfig & {
-  isAbleToRootSharp?: boolean;
-  isAbleToRootFlat?: boolean;
-};
+  isAbleToRootSharp?: boolean
+  isAbleToRootFlat?: boolean
+}
 
 export type Chord = {
-  chordName: string;
-  notesInChordName: Array<string>;
-  notesInChordDegree: Array<number>;
-};
+  chordName: string
+  notesInChord: Array<Note>
+  notesInChordDegree: Array<number>
+}
 
 export type CorrectChord = Chord & {
-  correctNotesInChord: Array<string>;
-};
+  correctNotesInChord: Array<string>
+}
 
 export type PcKeyToMidiMap = {
-  midiNumber: number,
+  midiNumber: number
   pcKey: string
-};
+}
 
-export type GamePlayMode = 'tempo' | 'nextByMyself' | 'correctToNext';
+export type GamePlayMode = 'tempo' | 'nextByMyself' | 'correctToNext'
