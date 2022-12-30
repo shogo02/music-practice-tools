@@ -2,10 +2,17 @@ import { useSnapshot } from 'valtio'
 import { Note } from 'webmidi'
 import { Constants } from '../../constants/constants'
 import { gameState } from '../../controller/GameState'
+import ChordCalculator from '../../util/ChordCalculator'
 import Key from './Key'
 
 function KeyBoard() {
-  const { playingNotes } = useSnapshot(gameState)
+  const { playingNotes, selectedAccidental } = useSnapshot(gameState)
+
+  let tmpPlayingNotes = [...playingNotes] as Array<Note>
+
+  if (selectedAccidental === 'flat') {
+    tmpPlayingNotes = ChordCalculator.convertToFlatNotes(tmpPlayingNotes, selectedAccidental)
+  }
 
   const offSet = Constants.KEYBOARD_OFFSET
   const keyBoardMaxNumber = 48
@@ -15,7 +22,7 @@ function KeyBoard() {
     <div className="flex justify-center">
       <div className="h-36 w-3/4 flex justify-center">
         {keyArray.map((e) => {
-          const playNote = playingNotes.find((e2) => e2.number === e) as Note
+          const playNote = tmpPlayingNotes.find((e2) => e2.number === e) as Note
           return (
             <div className="col-span-1" key={e}>
               <Key midiNumber={e} playNote={playNote} pcKey="" />

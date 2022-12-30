@@ -54,11 +54,9 @@ export class GameContoller {
   static setKeyBoardOctobe = (octobe: number) => {
     NoteController.clearKeyboradReleaseALl()
     gameState.keyBoardOctobe = octobe
-    gameState.playingNotes = []
   }
 
   static setSelectedAccidental = (accidental: Accidental) => {
     gameState.selectedAccidental = accidental
-    gameState.playingNotes = []
   }
 }

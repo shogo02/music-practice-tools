@@ -38,10 +38,7 @@ export default class ChordCalculator {
     const randomChord = selectedChord[ChordCalculator.getRandomNumber(selectedChord.length)]
     const chordConfig = NOTES_IN_CHORD_CONFIG.find((e) => e.key === randomChord.key)
     if (!chordConfig) throw new Error(`not found chord config.`)
-    const notes = ChordCalculator.convertToFlatNotes(
-      ChordCalculator.createNotesInChord(tmpRootNote, chordConfig?.notesInChord),
-      selectedAccidental
-    )
+    const notes = ChordCalculator.createNotesInChord(tmpRootNote, chordConfig?.notesInChord)
     const rootNoteName = tmpRootNote.name + (tmpRootNote.accidental ?? '')
 
     return {

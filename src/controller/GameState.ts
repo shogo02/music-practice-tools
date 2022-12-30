@@ -7,10 +7,10 @@ type GameState = {
   selectedChord: Array<ChordSettingElement>
   isPlay: boolean
   currentBeat: number
-  currentChord: Chord | undefined
+  currentChord: Chord
   correctNotes: Array<boolean | undefined>
   beforeRootNote: Note | undefined
-  selectedAccidental: string
+  selectedAccidental: Accidental
   playingNotes: Array<Note>
   keyBoardOctobe: number
 }
@@ -19,7 +19,7 @@ export const gameState: GameState = proxy({
   selectedChord: [],
   isPlay: false,
   currentBeat: 0,
-  currentChord: undefined,
+  currentChord: { chordName: '', notesInChord: [], notesInChordDegree: [] },
   correctNotes: [],
   beforeRootNote: undefined,
   selectedAccidental: 'natural',
