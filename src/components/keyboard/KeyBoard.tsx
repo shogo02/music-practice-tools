@@ -6,7 +6,7 @@ import ChordCalculator from '../../util/ChordCalculator'
 import Key from './Key'
 
 function KeyBoard() {
-  const { playingNotes, selectedAccidental } = useSnapshot(gameState)
+  const { playingNotes, selectedAccidental, keyBoardOctobe } = useSnapshot(gameState)
 
   let tmpPlayingNotes = [...playingNotes] as Array<Note>
 
@@ -14,7 +14,7 @@ function KeyBoard() {
     tmpPlayingNotes = ChordCalculator.convertToFlatNotes(tmpPlayingNotes, selectedAccidental)
   }
 
-  const offSet = Constants.KEYBOARD_OFFSET
+  const offSet = Constants.KEYBOARD_OFFSET + keyBoardOctobe * 12
   const keyBoardMaxNumber = 48
   const keyArray = [...Array(keyBoardMaxNumber)].map((_, i) => i + offSet)
 
