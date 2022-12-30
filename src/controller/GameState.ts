@@ -8,7 +8,7 @@ type GameState = {
   isPlay: boolean
   currentBeat: number
   currentChord: Chord
-  correctNotes: Array<boolean | undefined>
+  correctNotes: Array<boolean>
   beforeRootNote: Note | undefined
   selectedAccidental: Accidental
   playingNotes: Array<Note>

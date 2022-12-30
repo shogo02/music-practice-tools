@@ -1,6 +1,7 @@
 import { WebMidi, Note, Input } from 'webmidi'
 import * as Tone from 'tone'
-import { proxy } from 'valtio'
+import { proxy, subscribe } from 'valtio'
+import { type } from 'os'
 import { Accidental, Chord, ChordKeyName, ChordSettingElement, ChordSettings } from '../constants/type'
 import { Constants } from '../constants/constants'
 import { NoteController } from './NoteController'
@@ -19,6 +20,7 @@ export class GameContoller {
       }
     }
     NoteController.createMetronomeBeat(draw)
+    GameContoller.subscribeCorrectNote()
   }
 
   static createNextChord() {
@@ -30,7 +32,8 @@ export class GameContoller {
     gameState.currentChord = chord
     gameState.beforeRootNote = chord?.notesInChord[0]
 
-    gameState.correctNotes = new Array(chord.notesInChord.length).map((e) => false)
+    gameState.correctNotes.splice(0)
+    gameState.correctNotes.push(...new Array(chord.notesInChordDegree.length).fill(false))
   }
 
   static gameReset() {
@@ -40,6 +43,10 @@ export class GameContoller {
   static metronomeToggle() {
     NoteController.toggleTransport()
     gameState.isPlay = !gameState.isPlay
+
+    if (!gameState.isPlay) {
+      GameContoller.createNextChord()
+    }
   }
 
   static chordSettingHanler = (chordSettingElement: ChordSettingElement) => {
@@ -59,5 +66,13 @@ export class GameContoller {
 
   static setSelectedAccidental = (accidental: Accidental) => {
     gameState.selectedAccidental = accidental
+  }
+
+  static subscribeCorrectNote() {
+    subscribe(gameState.correctNotes, () => {
+      if (!gameState.isPlay && gameState.correctNotes.every((e) => e === true)) {
+        GameContoller.createNextChord()
+      }
+    })
   }
 }

@@ -26,6 +26,11 @@ export class NoteController {
     NoteController.keyboardSynth.triggerRelease(tmpNote.identifier)
     NoteController.keyboardSynth.triggerAttack(tmpNote.identifier)
     gameState.playingNotes.push(tmpNote)
+
+    const correctNoteIndex = gameState.currentChord.notesInChord.findIndex(
+      (e) => e.name + (e.accidental ?? '') === note.name + (note.accidental ?? '')
+    )
+    if (correctNoteIndex > -1) gameState.correctNotes[correctNoteIndex] = true
   }
 
   static noteOff(note: Note) {
