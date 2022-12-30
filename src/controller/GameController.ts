@@ -1,7 +1,7 @@
 import { WebMidi, Note, Input } from 'webmidi'
 import * as Tone from 'tone'
 import { proxy } from 'valtio'
-import { Chord, ChordKeyName, ChordSettingElement, ChordSettings } from '../constants/type'
+import { Accidental, Chord, ChordKeyName, ChordSettingElement, ChordSettings } from '../constants/type'
 import { Constants } from '../constants/constants'
 import { NoteController } from './NoteController'
 import ChordCalculator from '../util/ChordCalculator'
@@ -15,6 +15,7 @@ type GameState = {
   beforeRootNote: Note | undefined
   selectedAccidental: string
   playingNotes: Array<Note>
+  keyBoardOctobe: number
 }
 
 export const gameState: GameState = proxy({
@@ -26,6 +27,7 @@ export const gameState: GameState = proxy({
   beforeRootNote: undefined,
   selectedAccidental: 'natural',
   playingNotes: [new Note(60)],
+  keyBoardOctobe: 0,
 })
 
 export class GameContoller {
@@ -64,5 +66,13 @@ export class GameContoller {
     } else {
       gameState.selectedChord.push(chordSettingElement)
     }
+  }
+
+  static setKeyBoardOctobe = (octobe: number) => {
+    gameState.keyBoardOctobe = octobe
+  }
+
+  static setSelectedAccidental = (accidental: Accidental) => {
+    gameState.selectedAccidental = accidental
   }
 }

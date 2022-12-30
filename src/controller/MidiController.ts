@@ -3,8 +3,8 @@ import { WebMidi, Input } from 'webmidi'
 import { NoteController } from './NoteController'
 
 type MidiDeviceState = {
-  devices: Array<Input>
-  selectedDevice: Input | undefined
+  devices: Array<string>
+  selectedDevice: string | undefined
 }
 
 export const midiDeviceState: MidiDeviceState = proxy({
@@ -16,18 +16,19 @@ export class MidiController {
   static async initialize() {
     await WebMidi.enable()
       .then((value) => {
-        midiDeviceState.devices = value.inputs
-        if (midiDeviceState.devices.length) {
-          MidiController.selectDevice(midiDeviceState.devices[0].name, NoteController.noteOn, NoteController.noteOff)
-        }
+        midiDeviceState.devices = value.inputs.map((e) => e.name)
       })
       .catch((err) => {})
+    if (midiDeviceState.devices.length) {
+      MidiController.selectDevice(midiDeviceState.devices[0])
+    }
   }
 
-  static selectDevice(deviceName: string, noteOnListner: () => void, noteOffListner: () => void) {
-    midiDeviceState.selectedDevice?.removeListener()
-    midiDeviceState.selectedDevice = WebMidi.getInputByName(deviceName)
-    midiDeviceState.selectedDevice?.addListener('noteon', noteOnListner)
-    midiDeviceState.selectedDevice?.addListener('noteoff', noteOffListner)
+  static selectDevice(deviceName: string) {
+    WebMidi.getInputByName(midiDeviceState.selectedDevice ?? '')?.removeListener()
+    const midiDevice = WebMidi.getInputByName(deviceName)
+    midiDeviceState.selectedDevice = midiDevice?.name
+    midiDevice?.addListener('noteon', NoteController.noteOn)
+    midiDevice?.addListener('noteoff', NoteController.noteOff)
   }
 }

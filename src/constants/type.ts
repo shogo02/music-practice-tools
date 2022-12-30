@@ -59,3 +59,5 @@ export type PcKeyToMidiMap = {
 }
 
 export type GamePlayMode = 'tempo' | 'nextByMyself' | 'correctToNext'
+
+export type Accidental = 'natural' | 'sharp' | 'flat'
