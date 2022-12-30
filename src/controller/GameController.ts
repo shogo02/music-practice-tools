@@ -9,22 +9,28 @@ import { gameState } from './GameState'
 
 export class GameContoller {
   static initialize() {
+    GameContoller.createNextChord()
+
     const draw = () => {
       const position = NoteController.getCurrentBeat()
       gameState.currentBeat = position
       if (position === 1) {
-        const chord = ChordCalculator.createRandomChord(
-          gameState.selectedChord,
-          gameState.selectedAccidental,
-          gameState.beforeRootNote
-        )
-        gameState.currentChord = chord
-        gameState.beforeRootNote = chord?.notesInChord[0]
-
-        gameState.correctNotes = new Array(chord.notesInChord.length).map((e) => false)
+        GameContoller.createNextChord()
       }
     }
     NoteController.createMetronomeBeat(draw)
+  }
+
+  static createNextChord() {
+    const chord = ChordCalculator.createRandomChord(
+      gameState.selectedChord,
+      gameState.selectedAccidental,
+      gameState.beforeRootNote
+    )
+    gameState.currentChord = chord
+    gameState.beforeRootNote = chord?.notesInChord[0]
+
+    gameState.correctNotes = new Array(chord.notesInChord.length).map((e) => false)
   }
 
   static gameReset() {
