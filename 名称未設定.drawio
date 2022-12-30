@@ -1,0 +1,73 @@
+<mxfile host="65bd71144e">
+    <diagram id="Rnjm9otBg0Ub6ywoRB1v" name="ページ1">
+        <mxGraphModel dx="763" dy="553" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="uEW_mLSHan4oP90-Qk_z-1" value="再生/停止" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="290" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="コード設定" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="230" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="シャープ/フラット表記" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="350" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="ユーザー操作" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="200" width="140" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="音量調整" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="410" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="オクターブ" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="470" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="メトロノームTransport" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="290" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="メトロノームSynth" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="230" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="キーボードSynth" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="350" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="Tone" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="200" width="140" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="MIDI入力" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="530" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="PCキーボード入力" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="590" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="鍵盤クリック" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="650" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="コード設定ボタン" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="290" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="再生停止ボタン" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="230" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="拍表示" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="410" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="画面" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="200" width="140" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="シャープフラットボタン" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="350" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="コード名表示" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="470" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="構成音表示" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="530" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="度数表示" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="590" width="140" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -1,4 +1,4 @@
-export const test = () => {}
+export const test = () => {};
 // import { proxy } from 'valtio'
 // import * as Tone from 'tone';
 // import { subscribe } from 'valtio'
@@ -6,9 +6,6 @@ export const test = () => {}
 // import { convertToFlatNotes, createRandomChord, pcKeyToNote } from '../util/ChordCalculator';
 // import { Chord, CorrectChord } from '../constants/type';
 // import { WebMidi, Note, Input } from "../../node_modules/webmidi/dist/esm/webmidi.esm";
-
-
-
 
 // // TODO 関数や変数の整理が必要
 
@@ -31,8 +28,6 @@ export const test = () => {}
 //     }
 // }
 // export const beatPositionState = proxy({ value: 0 });
-
-
 
 // export const isPlayState = proxy({ isPlayMetronome: false })
 // export const toggleTransport = () => {
@@ -94,7 +89,6 @@ export const test = () => {}
 // const initPlayNoteState = () => {
 //     playNotesState.playNotes = [];
 // }
-
 
 // export const noteOctobeState = proxy({ noteOctobe: InitialValues.NOTE_OCTOBE });
 // export const setNoteOctobe = (noteOctobe: number) => {
@@ -163,8 +157,6 @@ export const test = () => {}
 //     keyboardSynth.triggerRelease(tmpNote.identifier)
 //     removePlayNotesState(tmpNote);
 // }
-
-
 
 // const midiInit = () => {
 //     initMidiDeviceState();

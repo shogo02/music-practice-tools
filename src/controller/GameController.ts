@@ -1,28 +1,31 @@
-import { Constants } from "../constants/constants";
-import { ChordKeyName } from "../constants/type";
-import { WebMidi, Note, Input } from "webmidi/dist/esm/webmidi.esm";
+import { WebMidi, Note, Input } from 'webmidi/dist/esm/webmidi.esm';
 import * as Tone from 'tone';
-import { proxy } from 'valtio'
-
+import { proxy } from 'valtio';
+import { ChordKeyName } from '../constants/type';
+import { Constants } from '../constants/constants';
 
 class GameController {
-    chordSettings = Constants.CHORD_SETTINGS_INIT;
-    selectedChord: ChordKeyName = "major";
-    isPlay = false;
-    currentBeat = 0;
+  chordSettings = Constants.CHORD_SETTINGS_INIT;
 
-    correctNote: Array<Note | undefined> = [];
-    incorrectNote: Array<Note | undefined> = [];
+  selectedChord: ChordKeyName = 'major';
 
-    constructor() { }
+  isPlay = false;
 
-    setSelectedChord(key: ChordKeyName) {
-        this.selectedChord = key;
-    }
+  currentBeat = 0;
 
-    metronomeToggle() {
-        this.isPlay = !this.isPlay;
-    }
+  correctNote: Array<Note | undefined> = [];
+
+  incorrectNote: Array<Note | undefined> = [];
+
+  constructor() { }
+
+  setSelectedChord(key: ChordKeyName) {
+    this.selectedChord = key;
+  }
+
+  metronomeToggle() {
+    this.isPlay = !this.isPlay;
+  }
 }
 
-export const gameControllerState: GameController = proxy(new GameController())
+export const gameControllerState: GameController = proxy(new GameController());

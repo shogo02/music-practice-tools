@@ -1,36 +1,36 @@
-import { Note } from "../../../node_modules/webmidi/dist/esm/webmidi.esm";
-import { Constants } from "../../constants/constants";
+import { Note } from 'webmidi/dist/esm/webmidi.esm';
+import { Constants } from '../../constants/constants';
 
 type KeyProps = {
-    midiNumber: number,
-    playNote: Note | undefined,
-    pcKey: string,
-}
+  midiNumber: number,
+  playNote: Note | undefined,
+  pcKey: string,
+};
 
 function Key(props: KeyProps) {
-    const displayNoteName = (props.playNote?.name ?? "") + (props.playNote?.accidental ?? "")
-    let addClassName = "";
-    if (Constants.MIDI_HALF_NOTE_NUMBER.find(e => e === props.midiNumber)) {
-        addClassName += "h-20 w-7 mx-[-14px] bg-slate-600 z-10 ";
-    } else {
-        addClassName += "h-36 w-10  ";
+  const { midiNumber, playNote, pcKey } = props;
+  const displayNoteName = (playNote?.name ?? '') + (playNote?.accidental ?? '');
+  let addClassName = '';
+  if (Constants.MIDI_HALF_NOTE_NUMBER.find((e) => e === midiNumber)) {
+    addClassName += 'h-20 w-7 mx-[-14px] bg-slate-600 z-10 ';
+  } else {
+    addClassName += 'h-36 w-10  ';
+  }
 
-    }
+  if (playNote) {
+    addClassName += 'bg-sky-600 ';
+  }
 
-    if (props.playNote) {
-        addClassName += "bg-sky-600 "
-    }
-
-    return (
-        <div className="flex">
-            <div className={addClassName + " border border-black flex justify-center items-end rounded-b-lg"}>
-                <div className="p-2">
-                    {displayNoteName}
-                    {props.pcKey ?? "none"}
-                </div>
-            </div>
+  return (
+    <div className="flex">
+      <div className={`${addClassName} border border-black flex justify-center items-end rounded-b-lg`}>
+        <div className="p-2">
+          {displayNoteName}
+          {pcKey ?? 'none'}
         </div>
-    )
+      </div>
+    </div>
+  );
 }
 
-export default Key
+export default Key;
