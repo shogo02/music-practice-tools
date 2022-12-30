@@ -7,8 +7,6 @@ import { NoteController } from '../controller/NoteController'
 import { convertMusicalSymbols } from '../util/converter'
 
 function Main() {
-  const { currentBeat, currentChord, correctNotes } = useSnapshot(gameState)
-
   useEffect(() => {
     GameContoller.gameReset()
     MidiController.initialize()
@@ -16,22 +14,25 @@ function Main() {
     GameContoller.initialize()
   }, [])
 
+  const { currentBeat, currentChord, correctNotes, playingNotes } = useSnapshot(gameState)
+  const displayPlayingNotes = playingNotes.map((e) => e.name + (e.accidental ?? ''))
+
   return (
     <div className="border border-black h-full bg-[#000730] text-cyan-200 p-7">
       <div className="text-4xl">{currentBeat}</div>
       <div className="text-6xl text-center">{parse(convertMusicalSymbols(currentChord?.chordName ?? 'X'))}</div>
-      {/* <div className="text-4xl text-center">
+      <div className="text-4xl text-center">
         {currentChord?.notesInChord.map((value, index) => {
-          const className = correctNotes.correctNotesInChord[index] ? 'text-red-300' : ''
+          const className = correctNotes[index] ? 'text-red-300' : ''
           return (
-            <span key={value} className={className}>
-              {parse(convertMusicalSymbols(value))}{' '}
+            <span key={value.identifier} className={className}>
+              {parse(convertMusicalSymbols(value.name + (value.accidental ?? '')))}{' '}
             </span>
           )
         })}
       </div>
-      <div className="text-3xl text-center">{displayChord.notesInChordDegree.join(' ')}</div>
-      <div className="text-3xl text-center">{parse(convertMusicalSymbols(displayPlayNotes.join(' ')))}</div> */}
+      <div className="text-3xl text-center">{currentChord?.notesInChordDegree.join(' ')}</div>
+      <div className="text-3xl text-center">{parse(convertMusicalSymbols(displayPlayingNotes.join(' ')))}</div>
 
       {/* <sub>7</sub><sup>(-5)</sup> */}
       {/* &#9837;	&#9839; */}

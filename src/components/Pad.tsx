@@ -8,6 +8,12 @@ function Pad() {
   const { isPlay, selectedChord } = useSnapshot(gameState)
   const selectedChordKey = selectedChord.map((e) => e.key)
 
+  if (!selectedChordKey.length) {
+    const defaultChord = chordSettingConfig.find((e) => e.key === 'major')
+    if (!defaultChord) throw new Error('undifind default chord')
+    GameContoller.chordSettingHanler(defaultChord)
+  }
+
   return (
     <div className="mt-5 mx-6">
       <div className="grid grid-cols-3 gap-5">
@@ -22,7 +28,7 @@ function Pad() {
                 id={`chord${e.key}`}
                 text={e.buttonDisplayName}
                 checked={checked}
-                onChange={() => GameContoller.chordSettingsHanler(e)}
+                onChange={() => GameContoller.chordSettingHanler(e)}
               />
             </div>
           )

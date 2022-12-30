@@ -11,28 +11,24 @@ type GameState = {
   isPlay: boolean
   currentBeat: number
   currentChord: Chord | undefined
-  correctNotes: Array<Note | undefined>
-  inncorrectNotes: Array<Note | undefined>
+  correctNotes: Array<boolean | undefined>
   beforeRootNote: Note | undefined
   selectedAccidental: string
+  playingNotes: Array<Note>
 }
 
 export const gameState: GameState = proxy({
-  selectedChord: [{ key: 'major', buttonDisplayName: 'M', chordAttachName: '' }],
+  selectedChord: [],
   isPlay: false,
   currentBeat: 0,
   currentChord: undefined,
   correctNotes: [],
-  inncorrectNotes: [],
   beforeRootNote: undefined,
   selectedAccidental: 'natural',
+  playingNotes: [new Note(60)],
 })
 
 export class GameContoller {
-  // setSelectedChord(key: ChordKeyName) {
-  //   this.selectedChord = key;
-  // }
-
   static initialize() {
     const draw = () => {
       const position = NoteController.getCurrentBeat()
@@ -45,6 +41,8 @@ export class GameContoller {
         )
         gameState.currentChord = chord
         gameState.beforeRootNote = chord?.notesInChord[0]
+
+        gameState.correctNotes = new Array(chord.notesInChord.length).map((e) => false)
       }
     }
     NoteController.createMetronomeBeat(draw)
@@ -59,18 +57,12 @@ export class GameContoller {
     gameState.isPlay = !gameState.isPlay
   }
 
-  static chordSettingsHanler = (chordSettingElement: ChordSettingElement) => {
+  static chordSettingHanler = (chordSettingElement: ChordSettingElement) => {
     const selectedChordKey = gameState.selectedChord.map((e) => e.key)
     if (selectedChordKey.includes(chordSettingElement.key)) {
       gameState.selectedChord = gameState.selectedChord.filter((e) => e.key !== chordSettingElement.key)
     } else {
       gameState.selectedChord.push(chordSettingElement)
-    }
-
-    if (!gameState.selectedChord.length) {
-      const defaultChord = Constants.CHORD_SETTINGS_INIT.find((e) => e.key === 'major')
-      if (!defaultChord) throw new Error('not found default chord')
-      gameState.selectedChord = [defaultChord]
     }
   }
 }
