@@ -5,30 +5,7 @@ import { Accidental, Chord, ChordKeyName, ChordSettingElement, ChordSettings } f
 import { Constants } from '../constants/constants'
 import { NoteController } from './NoteController'
 import ChordCalculator from '../util/ChordCalculator'
-
-type GameState = {
-  selectedChord: Array<ChordSettingElement>
-  isPlay: boolean
-  currentBeat: number
-  currentChord: Chord | undefined
-  correctNotes: Array<boolean | undefined>
-  beforeRootNote: Note | undefined
-  selectedAccidental: string
-  playingNotes: Array<Note>
-  keyBoardOctobe: number
-}
-
-export const gameState: GameState = proxy({
-  selectedChord: [],
-  isPlay: false,
-  currentBeat: 0,
-  currentChord: undefined,
-  correctNotes: [],
-  beforeRootNote: undefined,
-  selectedAccidental: 'natural',
-  playingNotes: [new Note(60)],
-  keyBoardOctobe: 0,
-})
+import { gameState } from './GameState'
 
 export class GameContoller {
   static initialize() {
@@ -69,10 +46,13 @@ export class GameContoller {
   }
 
   static setKeyBoardOctobe = (octobe: number) => {
+    NoteController.clearKeyboradReleaseALl()
     gameState.keyBoardOctobe = octobe
+    gameState.playingNotes = []
   }
 
   static setSelectedAccidental = (accidental: Accidental) => {
     gameState.selectedAccidental = accidental
+    gameState.playingNotes = []
   }
 }

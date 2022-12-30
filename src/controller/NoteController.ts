@@ -1,7 +1,10 @@
 import { WebMidi, Note, Input } from 'webmidi/dist/esm/webmidi.esm'
 import * as Tone from 'tone'
 import { proxy } from 'valtio'
+import { NoteMessageEvent } from 'webmidi'
 import { Constants } from '../constants/constants'
+import ChordCalculator from '../util/ChordCalculator'
+import { gameState } from './GameState'
 
 export class NoteController {
   static metronomeSynth: Tone.Synth<Tone.SynthOptions>
@@ -18,16 +21,23 @@ export class NoteController {
     }).toDestination()
   }
 
-  static noteOn() {
-    console.log('noteOn')
+  static noteOn(event: NoteMessageEvent) {
+    NoteController.keyboardSynth.triggerRelease(event.note.identifier)
+    NoteController.keyboardSynth.triggerAttack(event.note.identifier)
+    gameState.playingNotes.push(event.note)
   }
 
-  static noteOff() {
-    console.log('noteOff')
+  static noteOff(event: NoteMessageEvent) {
+    NoteController.keyboardSynth.triggerRelease(event.note.identifier)
+    gameState.playingNotes = gameState.playingNotes.filter((e) => e.identifier !== event.note.identifier)
   }
 
   static toggleTransport() {
     Tone.Transport.toggle()
+  }
+
+  static clearKeyboradReleaseALl() {
+    NoteController.keyboardSynth.releaseAll()
   }
 
   static createMetronomeBeat(draw?: () => void) {

@@ -1,7 +1,8 @@
 import { useSnapshot } from 'valtio'
 import PadButton from './parts/PadButton'
 import { Constants } from '../constants/constants'
-import { gameState, GameContoller } from '../controller/GameController'
+import { GameContoller } from '../controller/GameController'
+import { gameState } from '../controller/GameState'
 
 const chordSettingConfig = Constants.CHORD_SETTINGS_INIT
 function Pad() {

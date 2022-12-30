@@ -1,24 +1,24 @@
-import { Note } from 'webmidi/dist/esm/webmidi.esm';
-import { Constants } from '../../constants/constants';
+import { Note } from 'webmidi'
+import { Constants } from '../../constants/constants'
 
 type KeyProps = {
-  midiNumber: number,
-  playNote: Note | undefined,
-  pcKey: string,
-};
+  midiNumber: number
+  playNote: Note | undefined
+  pcKey: string
+}
 
 function Key(props: KeyProps) {
-  const { midiNumber, playNote, pcKey } = props;
-  const displayNoteName = (playNote?.name ?? '') + (playNote?.accidental ?? '');
-  let addClassName = '';
+  const { midiNumber, playNote, pcKey } = props
+  const displayNoteName = (playNote?.name ?? '') + (playNote?.accidental ?? '')
+  let addClassName = ''
   if (Constants.MIDI_HALF_NOTE_NUMBER.find((e) => e === midiNumber)) {
-    addClassName += 'h-20 w-7 mx-[-14px] bg-slate-600 z-10 ';
+    addClassName += 'h-20 w-7 mx-[-14px] bg-slate-600 z-10 '
   } else {
-    addClassName += 'h-36 w-10  ';
+    addClassName += 'h-36 w-10  '
   }
 
   if (playNote) {
-    addClassName += 'bg-sky-600 ';
+    addClassName += 'bg-sky-600 '
   }
 
   return (
@@ -30,7 +30,7 @@ function Key(props: KeyProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Key;
+export default Key

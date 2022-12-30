@@ -1,7 +1,8 @@
 import parse from 'html-react-parser'
 import { useEffect } from 'react'
 import { useSnapshot } from 'valtio'
-import { gameState, GameContoller } from '../controller/GameController'
+import { GameContoller } from '../controller/GameController'
+import { gameState } from '../controller/GameState'
 import { MidiController } from '../controller/MidiController'
 import { NoteController } from '../controller/NoteController'
 import { convertMusicalSymbols } from '../util/converter'
@@ -15,7 +16,9 @@ function Main() {
   }, [])
 
   const { currentBeat, currentChord, correctNotes, playingNotes } = useSnapshot(gameState)
-  const displayPlayingNotes = playingNotes.map((e) => e.name + (e.accidental ?? ''))
+  const displayPlayingNotes = [...playingNotes]
+    .sort((a, b) => (a.number < b.number ? -1 : 1))
+    .map((e) => e.name + (e.accidental ?? ''))
 
   return (
     <div className="border border-black h-full bg-[#000730] text-cyan-200 p-7">

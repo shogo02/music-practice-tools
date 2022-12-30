@@ -1,9 +1,10 @@
 import { useSnapshot } from 'valtio'
 import BpmSlider from './BpmSlider'
 import { Constants } from '../constants/constants'
-import { GameContoller, gameState } from '../controller/GameController'
+import { GameContoller } from '../controller/GameController'
 import { Accidental } from '../constants/type'
 import { MidiController, midiDeviceState } from '../controller/MidiController'
+import { gameState } from '../controller/GameState'
 
 function Mixer() {
   const { keyBoardOctobe } = useSnapshot(gameState)
