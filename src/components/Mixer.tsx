@@ -7,7 +7,7 @@ import { MidiController, midiDeviceState } from '../controller/MidiController'
 import { gameState } from '../controller/GameState'
 
 function Mixer() {
-  const { keyBoardOctobe } = useSnapshot(gameState)
+  const { keyBoardOctobe, chordType } = useSnapshot(gameState)
   const { devices } = useSnapshot(midiDeviceState)
 
   // TODO とりあえず、プルダウン実装。あとで変える
@@ -45,7 +45,7 @@ function Mixer() {
       </select>
       <select onChange={(e) => GameContoller.selectChordType(e.target.value as ChordType)}>
         {chordTypes.map((e) => (
-          <option key={e} value={e}>
+          <option key={e} value={e} selected={e === chordType}>
             {e}
           </option>
         ))}

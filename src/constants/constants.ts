@@ -1,4 +1,4 @@
-import { ChordKeyName, ChordSettings, DiatonicRoot, NotesInChordConfig } from './type'
+import { ChordKeyName, ChordSettings, DiatonicMinerChord, DiatonicRoot, NotesInChordConfig } from './type'
 
 export class Constants {
   static readonly PC_EY_OFFSET = 36
@@ -93,6 +93,21 @@ export class Constants {
   static readonly DIATONIC_4NOTE: Array<ChordKeyName> = ['M7', 'm7', 'm7', 'M7', '7', 'm7', 'm7b5']
 
   static readonly DIATONIC_ROOT: Array<DiatonicRoot> = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'Db', 'Ab', 'Eb', 'Bb', 'F']
+
+  static readonly DIATONIC_MINER: Array<DiatonicMinerChord> = [
+    'Am',
+    'Em',
+    'Bm',
+    'F#m',
+    'C#m',
+    'G#m',
+    'D#m',
+    'Abm',
+    'Fm',
+    'Cm',
+    'Gm',
+    'Dm',
+  ]
 
   static readonly SCALE_NOTES = [
     { key: 'majorScale', notesInScale: [1, 3, 5, 6, 8, 10, 12] },

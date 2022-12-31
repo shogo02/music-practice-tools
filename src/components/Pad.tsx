@@ -6,7 +6,7 @@ import { GameContoller } from '../controller/GameController'
 import { gameState } from '../controller/GameState'
 import { DiatonicRoot } from '../constants/type'
 
-const { CHORD_SETTINGS_INIT, DIATONIC_ROOT } = Constants
+const { CHORD_SETTINGS_INIT, DIATONIC_ROOT, DIATONIC_MINER } = Constants
 
 export function RandomChordType() {
   const { selectedChord } = useSnapshot(gameState)
@@ -38,13 +38,38 @@ export function RandomChordType() {
 }
 
 export function Diatonic3Note() {
+  const { selectedDiatonicRoot } = useSnapshot(gameState)
+  const rotateArray = [
+    'rotate-[0deg]',
+    'rotate-[30deg]',
+    'rotate-[60deg]',
+    'rotate-[90deg]',
+    'rotate-[120deg]',
+    'rotate-[150deg]',
+    'rotate-[180deg]',
+    'rotate-[210deg]',
+    'rotate-[240deg]',
+    'rotate-[270deg]',
+    'rotate-[300deg]',
+    'rotate-[330deg]',
+  ]
   return (
-    <div className="grid grid-cols-1 gap-2">
-      {DIATONIC_ROOT.map((e) => (
-        <div key={e} className="border border-black" onClick={() => GameContoller.selectDiatonicChordRoot(e)}>
-          {e}
-        </div>
-      ))}
+    <div>
+      <ul className="relative border p-0 mx-1 my-auto border-black w-[300px] h-[300px] rounded-[50%] list-none overflow-hidden rotate-[-15deg]">
+        {rotateArray.map((value, index) => {
+          const addClassName = DIATONIC_ROOT[index] === selectedDiatonicRoot ? 'bg-sky-600' : ''
+          return (
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+            <li
+              onClick={() => GameContoller.selectDiatonicChordRoot(DIATONIC_ROOT[index] as DiatonicRoot)}
+              key={value}
+              className={`overflow-hidden absolute top-0 right-0 w-1/2 h-1/2 origin-[0%_100%] border border-black ${addClassName} ${value} skew-y-[-60deg]`}
+            >
+              <div className="absolute rotate-[0deg] skew-y-[60deg] w-[0%]">{DIATONIC_ROOT[index]}</div>
+            </li>
+          )
+        })}
+      </ul>
     </div>
   )
 }

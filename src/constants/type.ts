@@ -65,3 +65,5 @@ export type Accidental = 'natural' | 'sharp' | 'flat'
 export type ChordType = 'random' | 'diatonic3Note' | 'diatonic4Note'
 
 export type DiatonicRoot = 'C' | 'G' | 'D' | 'A' | 'E' | 'B' | 'F#' | 'Db' | 'Ab' | 'Eb' | 'Bb' | 'F'
+
+export type DiatonicMinerChord = 'Am' | 'Em' | 'Bm' | 'F#m' | 'C#m' | 'G#m' | 'D#m' | 'Abm' | 'Fm' | 'Cm' | 'Gm' | 'Dm'

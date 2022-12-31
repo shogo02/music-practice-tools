@@ -27,6 +27,6 @@ export const gameState: GameState = proxy({
   selectedAccidental: 'natural',
   playingNotes: [],
   keyBoardOctobe: 0,
-  chordType: 'random',
+  chordType: 'diatonic3Note',
   selectedDiatonicRoot: 'C',
 })
