@@ -1,5 +1,4 @@
 import { useSnapshot } from 'valtio'
-import { useEffect } from 'react'
 import PadButton from './parts/PadButton'
 import { Constants } from '../constants/constants'
 import { GameContoller } from '../controller/GameController'
@@ -55,7 +54,7 @@ export function Diatonic3Note() {
   ]
   return (
     <div>
-      <ul className="relative border p-0 mx-1 my-auto border-black w-[300px] h-[300px] rounded-[50%] list-none overflow-hidden rotate-[-15deg]">
+      <ul className="relative border p-0 mx-1 my-auto border-black w-[200px] h-[200px] rounded-[50%] list-none overflow-hidden rotate-[-15deg]">
         {rotateArray.map((value, index) => {
           const addClassName = DIATONIC_ROOT[index] === selectedDiatonicRoot ? 'bg-sky-600' : ''
           return (

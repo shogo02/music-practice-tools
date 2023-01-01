@@ -16,7 +16,7 @@ export default class ChordCalculator {
   static getRandomRoot(selectedAccidental: string, beforeRootNote?: Note) {
     const shuffle = () => {
       const rootNoteName = NATURAL_ROOT[ChordCalculator.getRandomNumber(NATURAL_ROOT.length)]
-      const rootNote = new Note(`${rootNoteName}1`)
+      const rootNote = new Note(`${rootNoteName}4`)
       const pattern = ['natural']
       if (selectedAccidental.includes('sharp') && !['E', 'B'].includes(rootNote.name)) pattern.push('sharp')
       if (selectedAccidental.includes('flat') && !['C', 'F'].includes(rootNote.name)) pattern.push('flat')
@@ -83,7 +83,7 @@ export default class ChordCalculator {
   static createRnadomDiatonicChord(chordType: ChordType, selectedDiatonicRoot: DiatonicRoot, beforeRootNote?: Note) {
     const notesInScale = SCALE_NOTES.find((e) => e.key === 'majorScale')?.notesInScale
     if (!notesInScale) throw new Error(`not found scale note`)
-    const baseRootNote = new Note(`${selectedDiatonicRoot}1`)
+    const baseRootNote = new Note(`${selectedDiatonicRoot}4`)
 
     let rootNote = baseRootNote
     let randomNumber = 0

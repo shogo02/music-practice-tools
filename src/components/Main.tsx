@@ -8,6 +8,7 @@ import { MidiController } from '../controller/MidiController'
 import { NoteController } from '../controller/NoteController'
 import ChordCalculator from '../util/ChordCalculator'
 import { convertMusicalSymbols } from '../util/converter'
+import { Score } from './main/Score'
 
 function Main() {
   useEffect(() => {
@@ -32,7 +33,7 @@ function Main() {
     .map((e) => e.name + (e.accidental ?? ''))
 
   return (
-    <div className="border border-black h-full bg-[#000730] text-cyan-200 p-7">
+    <div className="border border-black h-full bg-[#000730] text-cyan-200 p-7 flex flex-col items-center">
       <div className="text-4xl">{currentBeat}</div>
       <div className="text-6xl text-center">{parse(convertMusicalSymbols(currentChord?.chordName ?? 'X'))}</div>
       <div className="text-4xl text-center">
@@ -47,7 +48,9 @@ function Main() {
       </div>
       <div className="text-3xl text-center">{currentChord?.notesInChordDegree.join(' ')}</div>
       <div className="text-3xl text-center">{parse(convertMusicalSymbols(displayPlayingNotes.join(' ')))}</div>
-
+      <div className="bg-white">
+        <Score notesInChord={displayNortesInChord} selectedAccidental={selectedAccidental} />
+      </div>
       {/* <sub>7</sub><sup>(-5)</sup> */}
       {/* &#9837;	&#9839; */}
     </div>
