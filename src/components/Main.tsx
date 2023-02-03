@@ -18,15 +18,15 @@ function Main() {
     GameContoller.initialize()
   }, [])
 
-  const { currentBeat, currentChord, correctNotes, playingNotes, selectedAccidental, selectedDiatonicRoot } =
+  const { currentBeat, currentChord, correctNotes, playingNotes, selectedAccidental, selectedDiatonicRoot, chordType } =
     useSnapshot(gameState)
 
   let tmpPlayingNotes = [...playingNotes] as Array<Note>
   let displayNortesInChord = [...currentChord.notesInChord] as Array<Note>
 
-  if (selectedAccidental === 'flat') {
-    tmpPlayingNotes = ChordCalculator.convertToFlatNotes(tmpPlayingNotes, selectedAccidental)
-    displayNortesInChord = ChordCalculator.convertToFlatNotes(displayNortesInChord, selectedAccidental)
+  if (selectedAccidental === 'flat' || selectedDiatonicRoot.includes('b')) {
+    tmpPlayingNotes = ChordCalculator.convertToFlatNotes(tmpPlayingNotes, 'flat')
+    displayNortesInChord = ChordCalculator.convertToFlatNotes(displayNortesInChord, 'flat')
   }
 
   const displayPlayingNotes = tmpPlayingNotes
@@ -47,10 +47,10 @@ function Main() {
           )
         })}
       </div>
-      <div className="text-3xl text-center">{currentChord?.notesInChordDegree.join(' ')}</div>
-      <Score displayNortesInChord={displayNortesInChord} selectedDiatonicRoot={selectedDiatonicRoot} />
+      <div className="text-3xl text-center">{currentChord?.notesInChord.map((e) => e.number).join(' ')}</div>
+      {/* <div className="text-3xl text-center">{currentChord?.notesInChordDegree.join(' ')}</div> */}
+      <Score displayNortesInChord={displayNortesInChord} selectedDiatonicRoot={selectedDiatonicRoot} chordType={chordType} />
       <div className="text-3xl text-center">{parse(convertMusicalSymbols(displayPlayingNotes.join(' ')))}</div>
-      {/* <Score notesInChord={displayNortesInChord} selectedAccidental={selectedAccidental} /> */}
       {/* <sub>7</sub><sup>(-5)</sup> */}
       {/* &#9837;	&#9839; */}
     </div>

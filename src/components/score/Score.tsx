@@ -1,37 +1,49 @@
 import { useEffect, useRef } from 'react'
 import { Note } from 'webmidi'
 import abcjs from 'abcjs'
-import { Accidental, DiatonicRoot } from '../../constants/type'
+import { Accidental, ChordType, DiatonicRoot } from '../../constants/type'
 import './ScoreStyle.css'
 
 type ScoreProps = {
   selectedDiatonicRoot: DiatonicRoot
+  chordType: ChordType
   displayNortesInChord: Note[]
 }
 
 export function Score(props: ScoreProps) {
-  const { selectedDiatonicRoot, displayNortesInChord } = props
-  const staffwidth = (root: DiatonicRoot) => {
-    if (root === 'C') return 77
-    if (root === 'G') return 96
-    return 147
-  }
+  const { selectedDiatonicRoot, displayNortesInChord, chordType } = props
+  console.log(displayNortesInChord)
+  const displayNotes = displayNortesInChord
+    .map((e) => {
+      let result = e.number < 72 ? e.name : e.name.toLowerCase()
+      if (e.accidental && chordType === 'random') {
+        if (e.accidental === '#') {
+          result = `^${result}`
+        } else {
+          result += 'b'
+        }
+      }
+      return result
+    })
+    .join('')
 
+  console.log(displayNotes)
   abcjs.renderAbc(
     'abcjs',
     `K:${selectedDiatonicRoot}
-    [${displayNortesInChord.map((e) => e.name).join('')}]2|`,
+    [${displayNotes}]8|`,
     {
-      paddingtop: 0,
-      paddingbottom: 0,
-      paddingleft: 0,
-      paddingright: 0,
-      staffwidth: staffwidth(selectedDiatonicRoot),
+      paddingtop: 10,
+      paddingbottom: 10,
+      paddingleft: 80,
+      paddingright: 80,
+      staffwidth: 147,
+      // wrap: { minSpacing: 0, maxSpacing: 0, preferredMeasuresPerLine: 4 },
       // viewportHorizontal: true,
       // viewportVertical: true,
       // responsive: 'resize',
     }
   )
 
-  return <div id="abcjs" className="h-[65px]" />
+  return <div id="abcjs" className="" />
 }

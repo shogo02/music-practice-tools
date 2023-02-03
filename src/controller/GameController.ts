@@ -51,9 +51,9 @@ export class GameContoller {
     NoteController.toggleTransport()
     gameState.isPlay = !gameState.isPlay
 
-    if (!gameState.isPlay) {
-      GameContoller.createNextChord()
-    }
+    // if (!gameState.isPlay) {
+    //   GameContoller.createNextChord()
+    // }
   }
 
   static chordSettingHanler = (chordSettingElement: ChordSettingElement) => {

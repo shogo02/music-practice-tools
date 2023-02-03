@@ -79,6 +79,12 @@ export default class ChordCalculator {
     return result
   }
 
+  static convertOctoveInChord(baseNote: Note, chord: Note[]): Note[] {
+    if (chord[0].octave === baseNote.octave) return chord
+    const result = chord.map((e) => (e.octave === baseNote.octave ? e : new Note(e.getOffsetNumber(-1))))
+    return result
+  }
+
   // ダイアトニックコード用
   static createRnadomDiatonicChord(chordType: ChordType, selectedDiatonicRoot: DiatonicRoot, beforeRootNote?: Note) {
     const notesInScale = SCALE_NOTES.find((e) => e.key === 'majorScale')?.notesInScale
@@ -111,7 +117,8 @@ export default class ChordCalculator {
     const chordConfig = NOTES_IN_CHORD_CONFIG.find((e) => e.key === rootNoteKey)
     if (!chordConfig) throw new Error(`not found chord config.`)
 
-    const chord = ChordCalculator.createRootFromNotes(result, chordConfig.notesInChord)
+    let chord = ChordCalculator.createRootFromNotes(result, chordConfig.notesInChord)
+    chord = ChordCalculator.convertOctoveInChord(baseRootNote, chord)
 
     const rootNoteName = chord[0].name + (chord[0].accidental ?? '')
     const chordAttachName = CHORD_SETTINGS_INIT.find((e) => e.key === rootNoteKey)?.chordAttachName

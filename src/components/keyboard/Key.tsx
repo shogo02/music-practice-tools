@@ -25,8 +25,9 @@ function Key(props: KeyProps) {
     <div className="flex">
       <div className={`${addClassName} border border-black flex justify-center items-end rounded-b-lg`}>
         <div className="p-2">
-          {displayNoteName}
-          {pcKey ?? 'none'}
+          {/* {displayNoteName}
+          {pcKey ?? 'none'} */}
+          {midiNumber}
         </div>
       </div>
     </div>
