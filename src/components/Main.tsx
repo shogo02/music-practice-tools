@@ -21,13 +21,8 @@ function Main() {
   const { currentBeat, currentChord, correctNotes, playingNotes, selectedAccidental, selectedDiatonicRoot, chordType } =
     useSnapshot(gameState)
 
-  let tmpPlayingNotes = [...playingNotes] as Array<Note>
-  let displayNortesInChord = [...currentChord.notesInChord] as Array<Note>
-
-  if (selectedAccidental === 'flat' || selectedDiatonicRoot.includes('b')) {
-    tmpPlayingNotes = ChordCalculator.convertToFlatNotes(tmpPlayingNotes, 'flat')
-    displayNortesInChord = ChordCalculator.convertToFlatNotes(displayNortesInChord, 'flat')
-  }
+  const tmpPlayingNotes = [...playingNotes] as Array<Note>
+  const displayNortesInChord = [...currentChord.notesInChord] as Array<Note>
 
   const displayPlayingNotes = tmpPlayingNotes
     .sort((a, b) => (a.number < b.number ? -1 : 1))

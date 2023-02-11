@@ -8,11 +8,11 @@ import Key from './Key'
 function KeyBoard() {
   const { playingNotes, selectedAccidental, keyBoardOctobe } = useSnapshot(gameState)
 
-  let tmpPlayingNotes = [...playingNotes] as Array<Note>
+  const tmpPlayingNotes = [...playingNotes] as Array<Note>
 
-  if (selectedAccidental === 'flat') {
-    tmpPlayingNotes = ChordCalculator.convertToFlatNotes(tmpPlayingNotes, selectedAccidental)
-  }
+  // if (selectedAccidental === 'flat') {
+  //   tmpPlayingNotes = ChordCalculator.convertToFlatNotes(tmpPlayingNotes, selectedAccidental)
+  // }
 
   const offSet = Constants.KEYBOARD_OFFSET + keyBoardOctobe * 12
   const keyBoardMaxNumber = 48

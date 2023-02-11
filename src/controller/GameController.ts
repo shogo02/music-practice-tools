@@ -32,6 +32,7 @@ export class GameContoller {
       chord = ChordCalculator.createRnadomDiatonicChord(
         gameState.chordType,
         gameState.selectedDiatonicRoot,
+        gameState.selectedAccidental,
         gameState.beforeRootNote
       )
     }
@@ -81,6 +82,13 @@ export class GameContoller {
 
   static selectDiatonicChordRoot(root: DiatonicRoot) {
     gameState.selectedDiatonicRoot = root
+    if (root === 'C') {
+      gameState.selectedAccidental = 'natural'
+    } else if (['D', 'G', 'A', 'E', 'B'].includes(root)) {
+      gameState.selectedAccidental = 'sharp'
+    } else {
+      gameState.selectedAccidental = 'flat'
+    }
   }
 
   static subscribeCorrectNote() {

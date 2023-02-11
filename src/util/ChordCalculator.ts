@@ -1,5 +1,6 @@
 import { Note } from 'webmidi'
 import {
+  Accidental,
   Chord,
   ChordKeyName,
   ChordSettingElement,
@@ -9,19 +10,29 @@ import {
   NotesInChordElement,
 } from '../constants/type'
 import { Constants } from '../constants/constants'
+import { convertToFlat, createNoteFromNoteName, transposeNote } from './NoteService'
+import { createChord, createChordName, getChordConfig, getChordKeyName } from './ChordService'
 
-const { NATURAL_ROOT, NOTES_IN_CHORD_CONFIG, CHORD_SETTINGS_INIT, DIATONIC_3NOTE, DIATONIC_4NOTE, SCALE_NOTES } = Constants
+const {
+  NATURAL_ROOT,
+  NOTES_IN_CHORD_CONFIG,
+  CHORD_SETTINGS_INIT,
+  DIATONIC_3NOTE,
+  DIATONIC_4NOTE,
+  SCALE_NOTE_NUMBERS,
+  MAJOR_SCALE_NOTE,
+} = Constants
 
 export default class ChordCalculator {
   static getRandomRoot(selectedAccidental: string, beforeRootNote?: Note) {
     const shuffle = () => {
-      const rootNoteName = NATURAL_ROOT[ChordCalculator.getRandomNumber(NATURAL_ROOT.length)]
+      const rootNoteName = NATURAL_ROOT[ChordCalculator.createRandomNumber(NATURAL_ROOT.length)]
       const rootNote = new Note(`${rootNoteName}4`)
       const pattern = ['natural']
       if (selectedAccidental.includes('sharp') && !['E', 'B'].includes(rootNote.name)) pattern.push('sharp')
       if (selectedAccidental.includes('flat') && !['C', 'F'].includes(rootNote.name)) pattern.push('flat')
 
-      switch (pattern[ChordCalculator.getRandomNumber(pattern.length)]) {
+      switch (pattern[ChordCalculator.createRandomNumber(pattern.length)]) {
         case 'sharp':
           rootNote.accidental = '#'
           break
@@ -43,7 +54,7 @@ export default class ChordCalculator {
 
   static createRandomChord(selectedChord: Array<ChordSettingElement>, selectedAccidental: string, beforeRootNote?: Note): Chord {
     const tmpRootNote = ChordCalculator.getRandomRoot(selectedAccidental, beforeRootNote)
-    const randomChord = selectedChord[ChordCalculator.getRandomNumber(selectedChord.length)]
+    const randomChord = selectedChord[ChordCalculator.createRandomNumber(selectedChord.length)]
     const chordConfig = NOTES_IN_CHORD_CONFIG.find((e) => e.key === randomChord.key)
     if (!chordConfig) throw new Error(`not found chord config.`)
     const notes = ChordCalculator.createRootFromNotes(tmpRootNote, chordConfig?.notesInChord)
@@ -56,20 +67,20 @@ export default class ChordCalculator {
     }
   }
 
-  static getRandomNumber = (max: number) => Math.floor(Math.random() * max)
+  static createRandomNumber = (max: number) => Math.floor(Math.random() * max)
 
-  static convertToFlatNotes = (notes: Array<Note>, selectedAccidental: string) => {
-    if (selectedAccidental !== 'flat') return notes
+  // static convertToFlatNotes = (notes: Array<Note>, selectedAccidental: string) => {
+  //   if (selectedAccidental !== 'flat') return notes
 
-    return notes.map((e) => {
-      let tmpNote = e
-      if (e.accidental === '#') {
-        tmpNote = new Note(e.getOffsetNumber(0, 1))
-        tmpNote.accidental = 'b'
-      }
-      return tmpNote
-    })
-  }
+  //   return notes.map((e) => {
+  //     let tmpNote = e
+  //     if (e.accidental === '#') {
+  //       tmpNote = new Note(e.getOffsetNumber(0, 1))
+  //       tmpNote.accidental = 'b'
+  //     }
+  //     return tmpNote
+  //   })
+  // }
 
   static createRootFromNotes = (rootNote: Note, intervalList: Array<number>, rootOffSet: number = 0) => {
     const result: Array<Note> = []
@@ -86,48 +97,39 @@ export default class ChordCalculator {
   }
 
   // ダイアトニックコード用
-  static createRnadomDiatonicChord(chordType: ChordType, selectedDiatonicRoot: DiatonicRoot, beforeRootNote?: Note) {
-    const notesInScale = SCALE_NOTES.find((e) => e.key === 'majorScale')?.notesInScale
-    if (!notesInScale) throw new Error(`not found scale note`)
-    const baseRootNote = new Note(`${selectedDiatonicRoot}4`)
+  static createRnadomDiatonicChord(
+    chordType: ChordType,
+    selectedDiatonicRoot: DiatonicRoot,
+    selectedAccidental: Accidental,
+    beforeRootNote?: Note
+  ) {
+    const majorScaleNote = MAJOR_SCALE_NOTE[selectedDiatonicRoot]
 
-    let rootNote = baseRootNote
+    const notesInScale = SCALE_NOTE_NUMBERS.majorScale
+    const baseRootNote = createNoteFromNoteName(selectedDiatonicRoot)
+
     let randomNumber = 0
     const shuffle = () => {
-      randomNumber = ChordCalculator.getRandomNumber(notesInScale.length)
+      randomNumber = ChordCalculator.createRandomNumber(notesInScale.length)
       const interval = notesInScale[randomNumber]
-      rootNote = new Note(baseRootNote.getOffsetNumber(0, interval - 1))
+      const rootNote = transposeNote(baseRootNote, 0, interval - 1)
       return rootNote
     }
 
-    let result = shuffle()
-    while (beforeRootNote?.identifier === result.identifier) {
-      result = shuffle()
+    let resultRootNote = shuffle()
+    while (beforeRootNote?.identifier === resultRootNote.identifier) {
+      resultRootNote = shuffle()
     }
 
-    let rootNoteKey: ChordKeyName
-    if (chordType === 'diatonic3Note') {
-      rootNoteKey = DIATONIC_3NOTE[randomNumber]
-    } else if (chordType === 'diatonic4Note') {
-      rootNoteKey = DIATONIC_4NOTE[randomNumber]
-    } else {
-      throw new Error('undifined chord type')
-    }
-
-    const chordConfig = NOTES_IN_CHORD_CONFIG.find((e) => e.key === rootNoteKey)
-    if (!chordConfig) throw new Error(`not found chord config.`)
-
-    let chord = ChordCalculator.createRootFromNotes(result, chordConfig.notesInChord)
-    chord = ChordCalculator.convertOctoveInChord(baseRootNote, chord)
-
-    const rootNoteName = chord[0].name + (chord[0].accidental ?? '')
-    const chordAttachName = CHORD_SETTINGS_INIT.find((e) => e.key === rootNoteKey)?.chordAttachName
-    if (chordAttachName === undefined) throw new Error(`not found chord attach name.`)
+    const chordKeyName = getChordKeyName(chordType, randomNumber + 1)
+    const chord = createChord(resultRootNote, chordKeyName, selectedAccidental)
+    const chordName = createChordName(chord[0], chordKeyName)
+    const chordConfig = getChordConfig(chordKeyName)
 
     return {
-      chordName: rootNoteName + chordAttachName,
+      chordName,
       notesInChord: chord,
-      notesInChordDegree: chordConfig.notesInChord,
+      notesInChordDegree: chordConfig?.notesInChord,
     }
   }
 

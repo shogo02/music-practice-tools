@@ -12,10 +12,9 @@ type ScoreProps = {
 
 export function Score(props: ScoreProps) {
   const { selectedDiatonicRoot, displayNortesInChord, chordType } = props
-  console.log(displayNortesInChord)
   const displayNotes = displayNortesInChord
     .map((e) => {
-      let result = e.number < 72 ? e.name : e.name.toLowerCase()
+      let result = e.number < 24 ? e.name : e.name.toLowerCase()
       if (e.accidental && chordType === 'random') {
         if (e.accidental === '#') {
           result = `^${result}`
@@ -27,7 +26,6 @@ export function Score(props: ScoreProps) {
     })
     .join('')
 
-  console.log(displayNotes)
   abcjs.renderAbc(
     'abcjs',
     `K:${selectedDiatonicRoot}
