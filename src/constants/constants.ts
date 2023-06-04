@@ -1,5 +1,5 @@
 import { constants } from 'buffer'
-import { ChordKeyName, ChordSettings, DiatonicMinerChord, DiatonicRoot, MajorScaleNote, NotesInChordConfig } from './type'
+import { ChordType, ChordSettings, DiatonicMinerChord, DiatonicRoot, MajorScaleNote, NotesInChordConfig } from './type'
 
 export class Constants {
   static readonly PC_EY_OFFSET = 36
@@ -62,24 +62,24 @@ export class Constants {
   ]
 
   static readonly NOTES_IN_CHORD_CONFIG: NotesInChordConfig = [
-    { key: 'power', notesInChord: [1, 8] },
-    { key: 'major', notesInChord: [1, 5, 8] },
-    { key: 'minor', notesInChord: [1, 4, 8] },
-    { key: 'dim', notesInChord: [1, 4, 7] },
-    { key: 'aug', notesInChord: [1, 5, 9] },
-    { key: 'sus2', notesInChord: [1, 3, 8] },
-    { key: 'sus4', notesInChord: [1, 6, 8] },
-    { key: '6', notesInChord: [1, 5, 8, 10] },
-    { key: 'm6', notesInChord: [1, 4, 8, 10] },
-    { key: '7', notesInChord: [1, 5, 8, 11] },
-    { key: 'M7', notesInChord: [1, 5, 8, 12] },
-    { key: 'm7', notesInChord: [1, 4, 8, 11] },
-    { key: 'aug7', notesInChord: [1, 4, 8, 12] },
-    { key: 'dim7', notesInChord: [1, 5, 9, 11] },
-    { key: '7b5', notesInChord: [1, 5, 7, 11] },
-    { key: '7shp5', notesInChord: [1, 5, 9, 11] },
-    { key: 'm7b5', notesInChord: [1, 4, 7, 11] },
-    { key: 'm7shp5', notesInChord: [1, 4, 9, 11] },
+    // { key: 'power', notesInChord: [1, 8] },
+    { key: 'major', notesInChord: [0, 4, 7] },
+    { key: 'minor', notesInChord: [0, 3, 7] },
+    { key: 'dim', notesInChord: [0, 3, 6] },
+    // { key: 'aug', notesInChord: [1, 5, 9] },
+    // { key: 'sus2', notesInChord: [1, 3, 8] },
+    // { key: 'sus4', notesInChord: [1, 6, 8] },
+    // { key: '6', notesInChord: [1, 5, 8, 10] },
+    // { key: 'm6', notesInChord: [1, 4, 8, 10] },
+    // { key: '7', notesInChord: [1, 5, 8, 11] },
+    // { key: 'M7', notesInChord: [1, 5, 8, 12] },
+    // { key: 'm7', notesInChord: [1, 4, 8, 11] },
+    // { key: 'aug7', notesInChord: [1, 4, 8, 12] },
+    // { key: 'dim7', notesInChord: [1, 5, 9, 11] },
+    // { key: '7b5', notesInChord: [1, 5, 7, 11] },
+    // { key: '7shp5', notesInChord: [1, 5, 9, 11] },
+    // { key: 'm7b5', notesInChord: [1, 4, 7, 11] },
+    // { key: 'm7shp5', notesInChord: [1, 4, 9, 11] },
   ]
 
   static readonly MIDI_HALF_NOTE_NUMBER = [
@@ -89,9 +89,9 @@ export class Constants {
 
   static readonly NATURAL_ROOT = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 
-  static readonly DIATONIC_3NOTE: Array<ChordKeyName> = ['major', 'minor', 'minor', 'major', 'major', 'minor', 'dim']
+  static readonly DIATONIC_3NOTE: Array<ChordType> = ['major', 'minor', 'minor', 'major', 'major', 'minor', 'dim']
 
-  static readonly DIATONIC_4NOTE: Array<ChordKeyName> = ['M7', 'm7', 'm7', 'M7', '7', 'm7', 'm7b5']
+  static readonly DIATONIC_4NOTE: Array<ChordType> = ['M7', 'm7', 'm7', 'M7', '7', 'm7', 'm7b5']
 
   static readonly DIATONIC_ROOT: Array<DiatonicRoot> = ['C', 'G', 'D', 'A', 'E', 'B', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F']
 
@@ -111,18 +111,18 @@ export class Constants {
   ]
 
   static readonly SCALE_NOTE_NUMBERS = {
-    majorScale: [1, 3, 5, 6, 8, 10, 12],
-    naturalMinorScale: [1, 3, 4, 6, 8, 9, 12],
+    majorScale: [0, 2, 4, 5, 7, 9, 11],
+    // naturalMinorScale: [1, 3, 4, 6, 8, 9, 12],
   }
 
-  static readonly MAJOR_SCALE_NOTE: MajorScaleNote = {
+  static readonly MAJOR_SCALE_IDENTIFIERS: MajorScaleNote = {
     C: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'],
     G: ['G3', 'A3', 'B3', 'C4', 'D4', 'E4', 'F#4'],
     D: ['D4', 'E4', 'F#4', 'G4', 'A4', 'B4', 'C#5'],
     A: ['A3', 'B3', 'C#4', 'D4', 'E4', 'F#4', 'G#4'],
     E: ['E4', 'F#4', 'G#4', 'A4', 'B4', 'C#5', 'D#4'],
     B: ['B3', 'C#4', 'D#4', 'E4', 'F#4', 'G#4', 'A#4'],
-    'F#': ['F#4', 'G#4', 'A#4', 'B3', 'C#5', 'D#5', 'E#5'],
+    'F#': ['F#4', 'G#4', 'A#4', 'B4', 'C#5', 'D#5', 'E#5'],
     Gb: ['Gb3', 'Ab3', 'Bb3', 'Cb3', 'Db4', 'Eb4', 'F4'],
     Db: ['Db4', 'Eb4', 'F4', 'Gb4', 'Ab4', 'Bb3', 'C5'],
     Ab: ['Ab3', 'Bb3', 'C4', 'Db4', 'Eb4', 'F4', 'G4'],

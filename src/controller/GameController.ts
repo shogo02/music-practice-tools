@@ -2,7 +2,7 @@ import { WebMidi, Note, Input } from 'webmidi'
 import * as Tone from 'tone'
 import { proxy, subscribe } from 'valtio'
 import { type } from 'os'
-import { Accidental, Chord, ChordKeyName, ChordSettingElement, ChordSettings, ChordType, DiatonicRoot } from '../constants/type'
+import { Accidental, Chord, ChordType, ChordSettingElement, ChordSettings, GameType, DiatonicRoot } from '../constants/type'
 import { Constants } from '../constants/constants'
 import { NoteController } from './NoteController'
 import ChordCalculator from '../util/ChordCalculator'
@@ -41,7 +41,7 @@ export class GameContoller {
     gameState.beforeRootNote = chord?.notesInChord[0]
 
     gameState.correctNotes.splice(0)
-    gameState.correctNotes.push(...new Array(chord.notesInChordDegree.length).fill(false))
+    gameState.correctNotes.push(...new Array(chord?.notesInChordDegree?.length).fill(false))
   }
 
   static gameReset() {
@@ -76,7 +76,7 @@ export class GameContoller {
     gameState.selectedAccidental = accidental
   }
 
-  static selectChordType(chordType: ChordType) {
+  static selectChordType(chordType: GameType) {
     gameState.chordType = chordType
   }
 

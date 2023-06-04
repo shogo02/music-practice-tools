@@ -1,7 +1,7 @@
 import { WebMidi, Note, Input } from 'webmidi'
 import * as Tone from 'tone'
 import { proxy } from 'valtio'
-import { Accidental, Chord, ChordKeyName, ChordSettingElement, ChordSettings } from '../constants/type'
+import { Accidental, Chord, ChordType, ChordSettingElement, ChordSettings } from '../constants/type'
 import { Constants } from '../constants/constants'
 import { NoteController } from './NoteController'
 import ChordCalculator from '../util/ChordCalculator'

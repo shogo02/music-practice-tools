@@ -2,16 +2,16 @@ import { Note } from 'webmidi'
 import {
   Accidental,
   Chord,
-  ChordKeyName,
-  ChordSettingElement,
   ChordType,
+  ChordSettingElement,
+  GameType,
   DiatonicRoot,
   NotesInChordConfig,
   NotesInChordElement,
 } from '../constants/type'
 import { Constants } from '../constants/constants'
-import { convertToFlat, createNoteFromNoteName, transposeNote } from './NoteService'
-import { createChord, createChordName, getChordConfig, getChordKeyName } from './ChordService'
+import { convertToFlat, createNoteFromNoteIdentifiers, createNoteFromNoteName, transposeNote } from './NoteService'
+import { createChord, createChordName, getChordConfig, getChordType } from './ChordService'
 
 const {
   NATURAL_ROOT,
@@ -20,13 +20,13 @@ const {
   DIATONIC_3NOTE,
   DIATONIC_4NOTE,
   SCALE_NOTE_NUMBERS,
-  MAJOR_SCALE_NOTE,
+  MAJOR_SCALE_IDENTIFIERS,
 } = Constants
 
 export default class ChordCalculator {
   static getRandomRoot(selectedAccidental: string, beforeRootNote?: Note) {
     const shuffle = () => {
-      const rootNoteName = NATURAL_ROOT[ChordCalculator.createRandomNumber(NATURAL_ROOT.length)]
+      const rootNoteName = NATURAL_ROOT[ChordCalculator.createRandomNumber(7)]
       const rootNote = new Note(`${rootNoteName}4`)
       const pattern = ['natural']
       if (selectedAccidental.includes('sharp') && !['E', 'B'].includes(rootNote.name)) pattern.push('sharp')
@@ -98,39 +98,56 @@ export default class ChordCalculator {
 
   // ダイアトニックコード用
   static createRnadomDiatonicChord(
-    chordType: ChordType,
+    gameType: GameType,
     selectedDiatonicRoot: DiatonicRoot,
     selectedAccidental: Accidental,
     beforeRootNote?: Note
-  ) {
-    const majorScaleNote = MAJOR_SCALE_NOTE[selectedDiatonicRoot]
-
-    const notesInScale = SCALE_NOTE_NUMBERS.majorScale
-    const baseRootNote = createNoteFromNoteName(selectedDiatonicRoot)
-
-    let randomNumber = 0
+  ): Chord {
+    const majScaleIdentifiers = MAJOR_SCALE_IDENTIFIERS[selectedDiatonicRoot]
+    let chordDegree = 0
+    let chordType: ChordType = 'major'
     const shuffle = () => {
-      randomNumber = ChordCalculator.createRandomNumber(notesInScale.length)
-      const interval = notesInScale[randomNumber]
-      const rootNote = transposeNote(baseRootNote, 0, interval - 1)
-      return rootNote
+      chordDegree = ChordCalculator.createRandomNumber(7) + 1 // 1 to 7
+      chordType = getChordType(gameType, chordDegree) // major or minor etc...
+
+      // TODO ↓ここの取得方法から考える
+      let notesDegree: number[] = []
+      if (gameType === 'diatonic3Note') {
+        notesDegree = [0, 2, 4].map((e) => {
+          const number = e + chordDegree
+          // return number
+          return number < 6 ? number : number - 6
+        })
+      } else if (gameType === 'diatonic4Note') {
+        notesDegree = [0, 2, 4, 6]
+      }
+
+      console.log(notesDegree)
+
+      const noteIdentifiers = notesDegree.map((e) => majScaleIdentifiers[e])
+      const chord = createNoteFromNoteIdentifiers(noteIdentifiers)
+      // const rootNote = transposeNote(baseRootNote, 0, interval - 1)
+      return chord
+
+      // 0~6のランダム数字を取得 → ダイアトニックコードの度数が決まる
+      // ダイアトニックコードの中から、chordtype(maj, min ...etc)を取得
+      // chordtypeによって
     }
 
-    let resultRootNote = shuffle()
-    while (beforeRootNote?.identifier === resultRootNote.identifier) {
-      resultRootNote = shuffle()
+    let notesInChord = shuffle()
+    while (beforeRootNote?.identifier === notesInChord[0].identifier) {
+      notesInChord = shuffle()
     }
-
-    const chordKeyName = getChordKeyName(chordType, randomNumber + 1)
-    const chord = createChord(resultRootNote, chordKeyName, selectedAccidental)
-    const chordName = createChordName(chord[0], chordKeyName)
-    const chordConfig = getChordConfig(chordKeyName)
+    const chordName = createChordName(notesInChord[0], chordType)
 
     return {
       chordName,
-      notesInChord: chord,
-      notesInChordDegree: chordConfig?.notesInChord,
+      notesInChord,
     }
+  }
+
+  static createChord(key: DiatonicRoot, chordType: ChordType, chordDegree: number) {
+    
   }
 
   static pcKeyToNote = (key: string) => {

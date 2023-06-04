@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { Note } from 'webmidi'
 import abcjs from 'abcjs'
-import { Accidental, ChordType, DiatonicRoot } from '../../constants/type'
+import { Accidental, GameType, DiatonicRoot } from '../../constants/type'
 import './ScoreStyle.css'
 
 type ScoreProps = {
   selectedDiatonicRoot: DiatonicRoot
-  chordType: ChordType
+  chordType: GameType
   displayNortesInChord: Note[]
 }
 
@@ -14,14 +14,35 @@ export function Score(props: ScoreProps) {
   const { selectedDiatonicRoot, displayNortesInChord, chordType } = props
   const displayNotes = displayNortesInChord
     .map((e) => {
-      let result = e.number < 24 ? e.name : e.name.toLowerCase()
-      if (e.accidental && chordType === 'random') {
-        if (e.accidental === '#') {
-          result = `^${result}`
-        } else {
-          result += 'b'
-        }
+      let result = e.name
+      switch (e.octave) {
+        case 1:
+          break
+        case 2:
+          break
+        case 3:
+          break
+        case 4:
+          break
+        case 5:
+          result = result.toLowerCase()
+          break
+        case 6:
+          break
+        case 7:
+          break
+        default:
+          break
       }
+
+      // if (e.octave === 5)
+      //   if (e.accidental && chordType === 'random') {
+      //     if (e.accidental === '#') {
+      //       result = `^${result}`
+      //     } else {
+      //       result += 'b'
+      //     }
+      //   }
       return result
     })
     .join('')

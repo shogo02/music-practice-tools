@@ -1,6 +1,6 @@
 import { Note } from 'webmidi'
 
-export type ChordKeyName =
+export type ChordType =
   | 'power'
   | 'major'
   | 'minor'
@@ -22,14 +22,14 @@ export type ChordKeyName =
   | 'm7shp5'
 
 export type ChordSettingElement = {
-  key: ChordKeyName
+  key: ChordType
   chordAttachName: string
   buttonDisplayName: string
 }
 export type ChordSettings = Array<ChordSettingElement>
 
 export type NotesInChordElement = {
-  key: ChordKeyName
+  key: ChordType
   notesInChord: Array<number>
 }
 export type NotesInChordConfig = Array<NotesInChordElement>
@@ -46,7 +46,7 @@ export type RootNoteConfig = NoteConfig & {
 export type Chord = {
   chordName: string
   notesInChord: Array<Note>
-  notesInChordDegree: Array<number>
+  notesInChordDegree?: Array<number>
 }
 
 export type CorrectChord = Chord & {
@@ -62,7 +62,7 @@ export type GamePlayMode = 'tempo' | 'nextByMyself' | 'correctToNext'
 
 export type Accidental = 'natural' | 'sharp' | 'flat'
 
-export type ChordType = 'random' | 'diatonic3Note' | 'diatonic4Note'
+export type GameType = 'random' | 'diatonic3Note' | 'diatonic4Note'
 
 export type DiatonicRoot = 'C' | 'G' | 'D' | 'A' | 'E' | 'B' | 'F#' | 'Gb' | 'Db' | 'Ab' | 'Eb' | 'Bb' | 'F'
 

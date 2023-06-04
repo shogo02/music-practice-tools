@@ -14,6 +14,10 @@ export function createNoteFromNoteName(noteName: string, octobe: number = 0): No
   return new Note(noteName + octobe)
 }
 
+export function createNoteFromNoteIdentifiers(noteIdentifiers: string[]): Note[] {
+  return noteIdentifiers.map((e) => new Note(e))
+}
+
 export function transposeNote(note: Note, octobe: number = 0, semitone: number = 0) {
   return new Note(note.getOffsetNumber(octobe, semitone))
 }
